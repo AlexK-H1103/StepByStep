@@ -82,12 +82,21 @@ export default function GoalForm({ handleAddGoal }) {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-neutral w-full"
-          >
-            Add Goal
-          </button>
+          <div className="flex flex-col gap-3 pt-2">
+            <button
+              type="submit"
+              className="btn btn-neutral w-full"
+            >
+              Add Goal
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline w-full"
+              onClick={() => navigate("/")}
+            >
+              ← Back to Goals
+            </button>
+          </div>
         </form>
       </div>
     </div>
