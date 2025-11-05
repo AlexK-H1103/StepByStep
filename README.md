@@ -1,16 +1,81 @@
-# React + Vite
+# StepByStep
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+_Achieve big goals through small, steady steps._
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Overview / 概要
 
-## React Compiler
+**StepByStep** は、  
+「計画を立てるのは得意だけど実行が続かない」人のための  
+**目標管理 × 習慣化支援アプリ**です。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+大きなゴールを設定し、それを達成するための小さなステップを登録。  
+日々の達成状況を可視化することで、ゲーム感覚で**モチベーション維持を支援**します。
 
-## Expanding the ESLint configuration
+> Built with React + Vite + Tailwind CSS.  
+> Designed to support self-growth through gamified productivity.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Demo / デモ
+
+- [View Live Demo on Vercel](https://stepbystep-amber.vercel.app/)
+
+---
+
+## Core Features / 主な機能
+
+- **Goal 設定**
+- **Step 管理**
+- **進捗率表示**
+- **日別 ToDo 機能（予定）**
+- **達成ログ（予定）**
+
+---
+
+## Tech Stack / 使用技術
+
+- React
+- Vite
+- Tailwind CSS
+- Vercel
+
+---
+
+## Getting Started / ローカル環境での実行
+
+```bash
+# Clone the repository
+git clone https://github.com/<your-username>/StepByStep.git
+cd StepByStep
+
+# Install dependencies
+npm install
+
+# Run the app
+npm run dev
+```
+
+---
+
+## Roadmap / 今後の予定
+
+- 日付ログ機能
+- タグ分類機能
+- TypeScript 対応
+- UI のアップグレード
+
+---
+
+## License / ライセンス
+
+This project is licensed under the MIT License.
+
+---
+
+## English Summary
+
+- StepByStep is a goal-tracking app that helps users break down big goals into achievable steps.
+- It is built with React (Vite + Tailwind) and will eventually be refactored with TypeScript.
+- The final goal is to create a game-like experience that motivates users visually through progress tracking.
