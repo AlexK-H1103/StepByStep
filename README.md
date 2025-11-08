@@ -47,7 +47,7 @@ _Achieve big goals through small, steady steps._
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/StepByStep.git
+git clone https://github.com/AlexK-H1103/StepByStep.git
 cd StepByStep
 
 # Install dependencies
