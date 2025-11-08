@@ -1,26 +1,40 @@
 export default function Step({ step, goal, updateGoalList }) {
   const handleToggleStep = () => {
     updateGoalList((prevGoals) =>
-      prevGoals.map((g) =>
-        g.id === goal.id
-          ? {
-              ...g,
-              steps: g.steps.map((s) =>
-                s.id === step.id ? { ...s, completed: !s.completed } : s
-              ),
-            }
-          : g
-      )
+      prevGoals.map((g) => {
+        if (g.id !== goal.id) return g;
+
+        const updatedSteps = g.steps.map((s) =>
+          s.id === step.id ? { ...s, completed: !s.completed } : s
+        );
+        const allCompleted = updatedSteps.every((s) => s.completed);
+
+        return {
+          ...g,
+          steps: updatedSteps,
+          completed: allCompleted,
+        };
+      })
     );
   };
 
   const handleRemoveStep = () => {
     updateGoalList((prevGoals) =>
-      prevGoals.map((g) =>
-        g.id === goal.id
-          ? { ...g, steps: g.steps.filter((s) => s.id !== step.id) }
-          : g
-      )
+      prevGoals.map((g) => {
+        if (g.id !== goal.id) return g;
+
+        const updatedSteps = g.steps.filter((s) => s.id !== step.id);
+        const allCompleted =
+          updatedSteps.length > 0
+            ? updatedSteps.every((s) => s.completed)
+            : false;
+
+        return {
+          ...g,
+          steps: updatedSteps,
+          completed: allCompleted,
+        };
+      })
     );
   };
 

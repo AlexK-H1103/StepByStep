@@ -5,7 +5,6 @@ import StepList from "../components/Step/StepList";
 export default function GoalDetail({
   goalList,
   updateGoalList,
-  handleToggleGoal,
   handleRemoveGoal,
 }) {
   const { id } = useParams();
@@ -19,22 +18,43 @@ export default function GoalDetail({
       </div>
     );
 
-  const handleToggle = () => handleToggleGoal(goal.id);
+  const handleToggleGoalAndSteps = () => {
+    const newStatus = !goal.completed;
 
-  const handleAddStep = (text) => {
-    if (!text.trim()) return;
-    updateGoalList((prev) =>
-      prev.map((g) =>
+    updateGoalList((prevGoals) =>
+      prevGoals.map((g) =>
         g.id === goal.id
           ? {
               ...g,
-              steps: [
-                ...g.steps,
-                { id: crypto.randomUUID(), text, completed: false },
-              ],
+              completed: newStatus,
+              steps: g.steps.map((s) => ({
+                ...s,
+                completed: newStatus,
+              })),
             }
           : g
       )
+    );
+  };
+
+  const handleAddStep = (text) => {
+    if (!text.trim()) return;
+
+    updateGoalList((prevGoals) =>
+      prevGoals.map((g) => {
+        if (g.id !== goal.id) return g;
+
+        const newSteps = [
+          ...g.steps,
+          { id: crypto.randomUUID(), text, completed: false },
+        ];
+
+        return {
+          ...g,
+          steps: newSteps,
+          completed: false,
+        };
+      })
     );
   };
 
@@ -67,7 +87,7 @@ export default function GoalDetail({
           </p>
           <button
             className="btn btn-sm btn-neutral"
-            onClick={handleToggle}
+            onClick={handleToggleGoalAndSteps}
           >
             {goal.completed ? "Not Finished" : "All Done"}
           </button>

@@ -21,12 +21,6 @@ export default function App() {
     setGoals((prev) => [...prev, newGoal]);
   };
 
-  // CHANGE BETWEEN COMPLETE INCOMPLETE
-  const handleToggleGoal = (id) =>
-    setGoals((prev) =>
-      prev.map((g) => (g.id === id ? { ...g, completed: !g.completed } : g))
-    );
-
   // DELETE GOAL
   const handleRemoveGoal = (id) =>
     setGoals((prev) => prev.filter((g) => g.id !== id));
@@ -44,7 +38,6 @@ export default function App() {
             <GoalDetail
               goalList={goals}
               updateGoalList={setGoals}
-              handleToggleGoal={handleToggleGoal}
               handleRemoveGoal={handleRemoveGoal}
             />
           }
