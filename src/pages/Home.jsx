@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GoalList from "./GoalList";
+import GoalList from "../components/Goal/GoalList";
 
 export default function Home({ goals }) {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./Home";
-import GoalDetail from "./GoalDetail";
-import GoalForm from "./GoalForm";
+import Home from "./pages/Home";
+import GoalDetail from "./pages/GoalDetail";
+import GoalForm from "./pages/GoalForm";
 
 export default function App() {
   const [goals, setGoals] = useState(() => {

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Progress from "./Progress";
+import Progress from "../Progress";
 
 export default function Goal({ id, text, completed, progress }) {
   const navigate = useNavigate();

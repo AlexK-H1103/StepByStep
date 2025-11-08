@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
-import StepForm from "./StepForm";
-import StepList from "./StepList";
+import StepForm from "../components/Step/StepForm";
+import StepList from "../components/Step/StepList";
 
 export default function GoalDetail({
   goalList,
