@@ -8,20 +8,30 @@ export default function App() {
   const [goals, setGoals] = useState(() => {
     const data = JSON.parse(localStorage.getItem("goals"));
     if (!data) return [];
-    return data.map((g) => ({ ...g, steps: g.steps || [] }));
+    return data.map((g) => ({
+      ...g,
+      steps: g.steps || [],
+      tags: g.tags || [],
+    }));
   });
 
-  // SAVE GOALS EVERYTIME CHANGES
+  const [availableTags, setAvailableTags] = useState(() => {
+    const data = JSON.parse(localStorage.getItem("tags"));
+    return data || [];
+  });
+
   useEffect(() => {
     localStorage.setItem("goals", JSON.stringify(goals));
   }, [goals]);
 
-  // ADD GOAL
+  useEffect(() => {
+    localStorage.setItem("tags", JSON.stringify(availableTags));
+  }, [availableTags]);
+
   const handleAddGoal = (newGoal) => {
     setGoals((prev) => [...prev, newGoal]);
   };
 
-  // DELETE GOAL
   const handleRemoveGoal = (id) =>
     setGoals((prev) => prev.filter((g) => g.id !== id));
 
@@ -30,7 +40,12 @@ export default function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home goals={goals} />}
+          element={
+            <Home
+              goals={goals}
+              availableTags={availableTags}
+            />
+          }
         />
         <Route
           path="/goals/:id"
@@ -39,12 +54,19 @@ export default function App() {
               goalList={goals}
               updateGoalList={setGoals}
               handleRemoveGoal={handleRemoveGoal}
+              availableTags={availableTags}
             />
           }
         />
         <Route
           path="/addGoal"
-          element={<GoalForm handleAddGoal={handleAddGoal} />}
+          element={
+            <GoalForm
+              handleAddGoal={handleAddGoal}
+              availableTags={availableTags}
+              setAvailableTags={setAvailableTags}
+            />
+          }
         />
       </Routes>
     </div>

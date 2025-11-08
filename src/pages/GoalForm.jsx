@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function GoalForm({ handleAddGoal }) {
+export default function GoalForm({
+  handleAddGoal,
+  availableTags,
+  setAvailableTags,
+}) {
   const [goalText, setGoalText] = useState("");
   const [steps, setSteps] = useState([{ id: crypto.randomUUID(), text: "" }]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [newTagName, setNewTagName] = useState("");
+  const [newTagColor, setNewTagColor] = useState("#ff0000");
+
   const navigate = useNavigate();
 
   const handleStepChange = (id, value) => {
@@ -16,6 +24,32 @@ export default function GoalForm({ handleAddGoal }) {
       }
       return updated;
     });
+  };
+
+  const toggleTag = (tagId) => {
+    setSelectedTags((prev) => {
+      if (prev.includes(tagId)) {
+        return prev.filter((id) => id !== tagId);
+      } else if (prev.length < 3) {
+        return [...prev, tagId];
+      }
+      return prev;
+    });
+  };
+
+  const handleAddNewTag = () => {
+    const trimmedName = newTagName.trim();
+    if (!trimmedName) return;
+
+    const newTag = {
+      id: crypto.randomUUID(),
+      name: trimmedName,
+      color: newTagColor,
+    };
+    setAvailableTags((prev) => [...prev, newTag]);
+    setSelectedTags((prev) => [...prev, newTag.id].slice(0, 3)); // 最大3個
+    setNewTagName("");
+    setNewTagColor("#ff0000");
   };
 
   const handleSubmit = (e) => {
@@ -36,11 +70,13 @@ export default function GoalForm({ handleAddGoal }) {
       text: trimmedGoal,
       completed: false,
       steps: validSteps,
+      tags: selectedTags,
     };
 
     handleAddGoal(newGoal);
     setGoalText("");
     setSteps([{ id: crypto.randomUUID(), text: "" }]);
+    setSelectedTags([]);
     navigate(`/goals/${newGoal.id}`);
   };
 
@@ -79,6 +115,50 @@ export default function GoalForm({ handleAddGoal }) {
                   className="input input-bordered w-full"
                 />
               ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="font-medium">Tags (max 3)</label>
+            <div className="flex flex-wrap gap-2">
+              {availableTags.map((tag) => (
+                <button
+                  key={tag.id}
+                  type="button"
+                  className={`px-2 py-1 badge ${
+                    selectedTags.includes(tag.id)
+                      ? "border-2 border-black"
+                      : "border border-gray-300"
+                  }`}
+                  style={{ backgroundColor: tag.color }}
+                  onClick={() => toggleTag(tag.id)}
+                >
+                  {tag.name}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-2 mt-2">
+              <input
+                type="text"
+                value={newTagName}
+                onChange={(e) => setNewTagName(e.target.value)}
+                placeholder="New tag name"
+                className="input input-bordered flex-1"
+              />
+              <input
+                type="color"
+                value={newTagColor}
+                onChange={(e) => setNewTagColor(e.target.value)}
+                className="w-12 h-10 p-0 border-0 rounded"
+              />
+              <button
+                type="button"
+                className="btn btn-sm btn-neutral"
+                onClick={handleAddNewTag}
+              >
+                Add
+              </button>
             </div>
           </div>
 
