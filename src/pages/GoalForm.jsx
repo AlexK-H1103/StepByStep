@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function GoalForm({
-  handleAddGoal,
-  availableTags,
-  setAvailableTags,
-}) {
+export default function GoalForm({ addGoal, availableTags, addTag }) {
   const [goalText, setGoalText] = useState("");
   const [steps, setSteps] = useState([{ id: crypto.randomUUID(), text: "" }]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -40,14 +36,14 @@ export default function GoalForm({
   const handleAddNewTag = () => {
     const trimmedName = newTagName.trim();
     if (!trimmedName) return;
-
     const newTag = {
       id: crypto.randomUUID(),
       name: trimmedName,
       color: newTagColor,
     };
-    setAvailableTags((prev) => [...prev, newTag]);
-    setSelectedTags((prev) => [...prev, newTag.id].slice(0, 3)); // 最大3個
+
+    addTag(newTag);
+    setSelectedTags((prev) => [...prev, newTag.id].slice(0, 3));
     setNewTagName("");
     setNewTagColor("#ff0000");
   };
@@ -73,7 +69,7 @@ export default function GoalForm({
       tags: selectedTags,
     };
 
-    handleAddGoal(newGoal);
+    addGoal(newGoal);
     setGoalText("");
     setSteps([{ id: crypto.randomUUID(), text: "" }]);
     setSelectedTags([]);
