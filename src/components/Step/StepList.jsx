@@ -1,6 +1,6 @@
 import Step from "./Step";
 
-export default function StepList({ goal, updateGoalList }) {
+export default function StepList({ goal, onToggleStep, onRemoveStep }) {
   const steps = goal.steps || [];
   const incomplete = steps.filter((s) => !s.completed);
   const complete = steps.filter((s) => s.completed);
@@ -20,8 +20,8 @@ export default function StepList({ goal, updateGoalList }) {
               <Step
                 key={s.id}
                 step={s}
-                goal={goal}
-                updateGoalList={updateGoalList}
+                onToggleStep={onToggleStep}
+                onRemoveStep={onRemoveStep}
               />
             ))}
           </div>
@@ -38,8 +38,8 @@ export default function StepList({ goal, updateGoalList }) {
               <Step
                 key={s.id}
                 step={s}
-                goal={goal}
-                updateGoalList={updateGoalList}
+                onToggleStep={onToggleStep}
+                onRemoveStep={onRemoveStep}
               />
             ))}
           </div>

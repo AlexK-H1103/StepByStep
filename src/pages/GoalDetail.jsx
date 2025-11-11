@@ -1,16 +1,17 @@
-import { useParams, useNavigate } from "react-router-dom";
 import StepForm from "../components/Step/StepForm";
 import StepList from "../components/Step/StepList";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function GoalDetail({
-  goalList,
-  updateGoalList,
-  handleRemoveGoal,
+  goals,
+  updateGoal,
+  removeGoal,
+  availableTags,
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const goal = goalList.find((g) => g.id === id);
+  const goal = goals.find((g) => g.id === id);
   if (!goal)
     return (
       <div className="min-h-screen bg-base-200 flex justify-center items-center">
@@ -20,42 +21,42 @@ export default function GoalDetail({
 
   const handleToggleGoalAndSteps = () => {
     const newStatus = !goal.completed;
-
-    updateGoalList((prevGoals) =>
-      prevGoals.map((g) =>
-        g.id === goal.id
-          ? {
-              ...g,
-              completed: newStatus,
-              steps: g.steps.map((s) => ({
-                ...s,
-                completed: newStatus,
-              })),
-            }
-          : g
-      )
-    );
+    const updated = {
+      ...goal,
+      completed: newStatus,
+      steps: goal.steps.map((s) => ({ ...s, completed: newStatus })),
+    };
+    updateGoal(updated);
   };
 
   const handleAddStep = (text) => {
     if (!text.trim()) return;
+    const newSteps = [
+      ...(goal.steps || []),
+      { id: crypto.randomUUID(), text: text.trim(), completed: false },
+    ];
+    updateGoal({ ...goal, steps: newSteps, completed: false });
+  };
 
-    updateGoalList((prevGoals) =>
-      prevGoals.map((g) => {
-        if (g.id !== goal.id) return g;
+  const handleRemoveGoal = () => {
+    removeGoal(goal.id);
+    navigate("/");
+  };
 
-        const newSteps = [
-          ...g.steps,
-          { id: crypto.randomUUID(), text, completed: false },
-        ];
-
-        return {
-          ...g,
-          steps: newSteps,
-          completed: false,
-        };
-      })
+  const handleToggleStep = (stepId) => {
+    const updatedSteps = goal.steps.map((s) =>
+      s.id === stepId ? { ...s, completed: !s.completed } : s
     );
+    const allCompleted =
+      updatedSteps.length > 0 ? updatedSteps.every((s) => s.completed) : false;
+    updateGoal({ ...goal, steps: updatedSteps, completed: allCompleted });
+  };
+
+  const handleRemoveStep = (stepId) => {
+    const updatedSteps = goal.steps.filter((s) => s.id !== stepId);
+    const allCompleted =
+      updatedSteps.length > 0 ? updatedSteps.every((s) => s.completed) : false;
+    updateGoal({ ...goal, steps: updatedSteps, completed: allCompleted });
   };
 
   return (
@@ -65,10 +66,7 @@ export default function GoalDetail({
           <h2 className="text-2xl font-bold break-words">{goal.text}</h2>
           <button
             className="btn btn-outline btn-error btn-xs"
-            onClick={() => {
-              handleRemoveGoal(goal.id);
-              navigate("/");
-            }}
+            onClick={handleRemoveGoal}
           >
             Delete
           </button>
@@ -98,7 +96,8 @@ export default function GoalDetail({
         <StepForm onAddStep={handleAddStep} />
         <StepList
           goal={goal}
-          updateGoalList={updateGoalList}
+          onToggleStep={handleToggleStep}
+          onRemoveStep={handleRemoveStep}
         />
 
         <div className="pt-4">
