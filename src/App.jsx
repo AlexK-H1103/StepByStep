@@ -7,8 +7,12 @@ import { useGoals } from "./hooks/useGoals";
 import { useTags } from "./hooks/useTags";
 
 export default function App() {
-  const { goals, addGoal, updateGoal, removeGoal } = useGoals();
-  const { availableTags, addTag, removeTag } = useTags();
+  const { goals, addGoal, updateGoal, removeGoal, progressMap } = useGoals();
+
+  const { availableTags, addTag, updateTag, removeTagCompletely } = useTags({
+    goals,
+    updateGoal,
+  });
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -21,6 +25,7 @@ export default function App() {
               <Home
                 goals={goals}
                 availableTags={availableTags}
+                progressMap={progressMap}
               />
             }
           />
@@ -32,6 +37,7 @@ export default function App() {
                 updateGoal={updateGoal}
                 removeGoal={removeGoal}
                 availableTags={availableTags}
+                addTag={addTag}
               />
             }
           />

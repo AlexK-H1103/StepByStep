@@ -6,15 +6,21 @@ export default function Header() {
       <div className="flex-1">
         <Link
           to="/"
-          className="text-2xl font-bold text-600 hover:text-blue-800"
+          className="text-2xl font-bold text-600 hover:text-primary"
         >
           StepByStep
         </Link>
       </div>
-      <div className="flex-none gap-2">
+      <div className="flex-none flex item-center gap-2">
+        <Link
+          to="/tags"
+          className="btn btn-ghost btn-sm gap-1"
+        >
+          Tags
+        </Link>
         <Link
           to="/login"
-          className="btn btn-ghost btn-sm text-gray-700 hover:text-blue-600"
+          className="btn btn-ghost btn-sm"
         >
           Login
         </Link>

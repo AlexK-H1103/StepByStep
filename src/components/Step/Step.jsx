@@ -1,16 +1,18 @@
 export default function Step({ step, onToggleStep, onRemoveStep }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-lg border border-base-300 p-2">
-      <label className="flex items-center gap-2 flex-grow">
+    <div
+      className={`flex items-center justify-between gap-2 rounded-lg border border-base-300 p-2 ${
+        step.completed ? "opacity-70" : ""
+      }`}
+    >
+      <label className="flex items-center gap-2 flex-grow cursor-pointer">
         <input
           type="checkbox"
           className="checkbox checkbox-neutral"
           checked={step.completed}
           onChange={() => onToggleStep(step.id)}
         />
-        <span className={`truncate ${step.completed ? "text-gray-500" : ""}`}>
-          {step.text}
-        </span>
+        {step.text}
       </label>
       <button
         onClick={() => onRemoveStep(step.id)}

@@ -6,7 +6,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
   const [steps, setSteps] = useState([{ id: crypto.randomUUID(), text: "" }]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [newTagName, setNewTagName] = useState("");
-  const [newTagColor, setNewTagColor] = useState("#ff0000");
+  const [newTagColor, setNewTagColor] = useState("#4f46e5");
 
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     addTag(newTag);
     setSelectedTags((prev) => [...prev, newTag.id].slice(0, 3));
     setNewTagName("");
-    setNewTagColor("#ff0000");
+    setNewTagColor("#4f46e5");
   };
 
   const handleSubmit = (e) => {
@@ -70,9 +70,6 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     };
 
     addGoal(newGoal);
-    setGoalText("");
-    setSteps([{ id: crypto.randomUUID(), text: "" }]);
-    setSelectedTags([]);
     navigate(`/goals/${newGoal.id}`);
   };
 
@@ -89,7 +86,6 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
             <label className="font-medium">Goal</label>
             <input
               type="text"
-              name="goal"
               value={goalText}
               onChange={(e) => setGoalText(e.target.value)}
               placeholder="Enter your goal..."
@@ -101,13 +97,13 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
           <div className="space-y-2">
             <label className="font-medium">Steps</label>
             <div className="space-y-2">
-              {steps.map((step, index) => (
+              {steps.map((step, i) => (
                 <input
                   key={step.id}
                   type="text"
                   value={step.text}
                   onChange={(e) => handleStepChange(step.id, e.target.value)}
-                  placeholder={`Step ${index + 1}`}
+                  placeholder={`Step ${i + 1}`}
                   className="input input-bordered w-full"
                 />
               ))}
@@ -116,25 +112,8 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
 
           <div className="space-y-2">
             <label className="font-medium">Tags (max 3)</label>
-            <div className="flex flex-wrap gap-2">
-              {availableTags.map((tag) => (
-                <button
-                  key={tag.id}
-                  type="button"
-                  className={`px-2 py-1 badge ${
-                    selectedTags.includes(tag.id)
-                      ? "border-2 border-black"
-                      : "border border-gray-300"
-                  }`}
-                  style={{ backgroundColor: tag.color }}
-                  onClick={() => toggleTag(tag.id)}
-                >
-                  {tag.name}
-                </button>
-              ))}
-            </div>
 
-            <div className="flex gap-2 mt-2">
+            <div className="flex items-center gap-2 mt-2">
               <input
                 type="text"
                 value={newTagName}
@@ -146,7 +125,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
                 type="color"
                 value={newTagColor}
                 onChange={(e) => setNewTagColor(e.target.value)}
-                className="w-12 h-10 p-0 border-0 rounded"
+                className="w-10 h-10 rounded"
               />
               <button
                 type="button"
@@ -155,6 +134,23 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
               >
                 Add
               </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {availableTags.map((tag) => (
+                <button
+                  key={tag.id}
+                  type="button"
+                  className={`px-2 py-1 badge text-white ${
+                    selectedTags.includes(tag.id)
+                      ? "ring-2 ring-black"
+                      : "opacity-70"
+                  }`}
+                  style={{ backgroundColor: tag.color }}
+                  onClick={() => toggleTag(tag.id)}
+                >
+                  {tag.name}
+                </button>
+              ))}
             </div>
           </div>
 

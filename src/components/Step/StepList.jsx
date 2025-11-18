@@ -6,7 +6,7 @@ export default function StepList({ goal, onToggleStep, onRemoveStep }) {
   const complete = steps.filter((s) => s.completed);
 
   if (steps.length === 0)
-    return <p className="text-gray-500 text-sm">No steps</p>;
+    return <p className="text-gray-500 text-sm italic">No steps</p>;
 
   return (
     <div className="space-y-6">
@@ -26,7 +26,7 @@ export default function StepList({ goal, onToggleStep, onRemoveStep }) {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-sm italic">All steps completed!</p>
+          <p className="text-gray-400 text-sm italic">All steps completed!</p>
         )}
       </section>
 
@@ -44,7 +44,7 @@ export default function StepList({ goal, onToggleStep, onRemoveStep }) {
             ))}
           </div>
         ) : (
-          <p className="text-gray-500 text-sm italic">No completed steps</p>
+          <p className="text-gray-400 text-sm italic">No completed steps</p>
         )}
       </section>
     </div>
