@@ -61,6 +61,7 @@ export default function App() {
         availableTags={availableTags}
         updateTag={updateTag}
         removeTag={removeTag}
+        addTag={addTag}
       />
     </div>
   );

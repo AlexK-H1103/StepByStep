@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getContrastTextColor } from "../UI/ColorPalette";
+import ColorPalette, { getContrastTextColor } from "../UI/ColorPalette";
 import TagEditorPanel from "./TagEditorPanel";
 
 export default function TagManagerModal({
@@ -8,15 +8,57 @@ export default function TagManagerModal({
   availableTags,
   removeTag,
   updateTag,
+  addTag,
 }) {
-  const [expandedId, setExpandedId] = useState(null);
+  const [editingId, setEditingId] = useState(null);
+  const [input, setInput] = useState("");
+  const [newColor, setNewColor] = useState("#EF4444");
 
   if (!isOpen) return null;
+
+  const handleCreate = () => {
+    const name = input.trim();
+    if (!name) return;
+    const newTag = {
+      id: crypto.randomUUID(),
+      name,
+      color: newColor,
+    };
+
+    addTag(newTag);
+    setInput("");
+    setNewColor("#EF4444");
+  };
 
   return (
     <div className="modal modal-open">
       <div className="modal-box w-full max-w-lg space-y-4">
         <h2 className="text-lg font-bold">Manage Tags</h2>
+        <div className="space-y2">
+          <input
+            type="text"
+            className="input input-border w-full"
+            placeholder="Create new tag"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+        </div>
+        {input.trim() && (
+          <div className="flex items-center gap-2">
+            <ColorPalette
+              value={newColor}
+              onChange={setNewColor}
+            />
+            <button
+              className="btn btn-neutral btn-sm"
+              onClick={handleCreate}
+            >
+              Create "{input}"
+            </button>
+          </div>
+        )}
+
+        <div className="divider my-2"></div>
 
         <div className="flex flex-wrap gap-2">
           {availableTags.map((tag) => (
@@ -27,9 +69,7 @@ export default function TagManagerModal({
                 backgroundColor: tag.color,
                 color: getContrastTextColor(tag.color),
               }}
-              onClick={() =>
-                setExpandedId(expandedId === tag.id ? null : tag.id)
-              }
+              onClick={() => setEditingId(editingId === tag.id ? null : tag.id)}
             >
               {tag.name}
             </span>
@@ -41,8 +81,8 @@ export default function TagManagerModal({
             <TagEditorPanel
               key={tag.id}
               tag={tag}
-              expanded={expandedId === tag.id}
-              onClose={() => setExpandedId(null)}
+              editing={editingId === tag.id}
+              onClose={() => setEditingId(null)}
               updateTag={updateTag}
               removeTag={removeTag}
             />

@@ -3,7 +3,7 @@ import ColorPalette from "../UI/ColorPalette";
 
 export default function TagEditorPanel({
   tag,
-  expanded,
+  editing,
   onClose,
   updateTag,
   removeTag,
@@ -25,10 +25,10 @@ export default function TagEditorPanel({
   return (
     <div
       className={`transition-all overflow-hidden ${
-        expanded ? "max-h-60 mt-2" : "max-h-0"
+        editing ? "max-h-60 mt-2" : "max-h-0"
       }`}
     >
-      {expanded && (
+      {editing && (
         <div className="border border-base-300 rounded-lg p-3 space-y-3">
           <div className="flex items-center gap-2">
             <label className="text-sm w-16">Name</label>
