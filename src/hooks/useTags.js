@@ -1,7 +1,9 @@
 import { useLocalStorage } from "./useLocalStorage";
+import { useGoals } from "./useGoals";
 
 export const useTags = () => {
   const [availableTags, setAvailableTags] = useLocalStorage("tags", []);
+  const { goals, updateGoal } = useGoals();
 
   const addTag = (tag) => {
     setAvailableTags((prev) => [...prev, tag]);
@@ -13,7 +15,7 @@ export const useTags = () => {
     );
   };
 
-  const removeTagCompletely = (tagId) => {
+  const removeTag = (tagId) => {
     setAvailableTags((prev) => prev.filter((t) => t.id !== tagId));
 
     if (updateGoal && goals.length) {
@@ -28,5 +30,5 @@ export const useTags = () => {
     }
   };
 
-  return { availableTags, addTag, updateTag, removeTagCompletely };
+  return { availableTags, addTag, updateTag, removeTag };
 };

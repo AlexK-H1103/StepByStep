@@ -1,7 +1,8 @@
 import { useState } from "react";
 import StepForm from "../components/Step/StepForm";
 import StepList from "../components/Step/StepList";
-import TagModal from "../components/TagModal";
+import TagModal from "../components/Tag/TagModal";
+import { getContrastTextColor } from "../components/UI/ColorPalette";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function GoalDetail({
@@ -91,8 +92,11 @@ export default function GoalDetail({
                 return (
                   <span
                     key={tag.id}
-                    className="px-2 py-1 badge text-white"
-                    style={{ backgroundColor: tag.color }}
+                    className="px-2 py-1 badge "
+                    style={{
+                      backgroundColor: tag.color,
+                      color: getContrastTextColor(tag.color),
+                    }}
                   >
                     {tag.name}
                   </span>

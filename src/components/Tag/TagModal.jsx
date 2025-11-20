@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import ColorPalette, { getContrastTextColor } from "../UI/ColorPalette";
 
 export default function TagModal({
   isOpen,
@@ -9,7 +10,7 @@ export default function TagModal({
   addTag,
 }) {
   const [input, setInput] = useState("");
-  const [newColor, setNewColor] = useState("#4f46e5");
+  const [newColor, setNewColor] = useState("#EF4444");
 
   if (!isOpen) return null;
 
@@ -54,8 +55,11 @@ export default function TagModal({
             return (
               <span
                 key={id}
-                className="px-2 py-1 badge text-white"
-                style={{ backgroundColor: t.color }}
+                className="px-2 py-1 badge "
+                style={{
+                  backgroundColor: t.color,
+                  color: getContrastTextColor(t.color),
+                }}
               >
                 {t.name}
               </span>
@@ -73,11 +77,9 @@ export default function TagModal({
 
         {input.trim() && (
           <div className="flex items-center gap-2">
-            <input
-              type="color"
+            <ColorPalette
               value={newColor}
-              onChange={(e) => setNewColor(e.target.value)}
-              className="w-10 h-10 rounded"
+              onChange={setNewColor}
             />
             <button
               className="btn btn-neutral btn-sm"
@@ -94,12 +96,15 @@ export default function TagModal({
           {filteredTags.map((tag) => (
             <button
               key={tag.id}
-              className={`px-2 py-1 badge text-white ${
+              className={`px-2 py-1 badge  ${
                 selectedTags.includes(tag.id)
                   ? "ring-2 ring-black"
                   : "opacity-70"
               }`}
-              style={{ backgroundColor: tag.color }}
+              style={{
+                backgroundColor: tag.color,
+                color: getContrastTextColor(tag.color),
+              }}
               onClick={() => toggleTag(tag.id)}
             >
               {tag.name}

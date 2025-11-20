@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Header() {
+export default function Header({ onOpenTagManager }) {
   return (
     <header className="navbar bg-base-100 shadow-lg px-6 py-4 mb-6 rounded-b-lg">
       <div className="flex-1">
@@ -12,12 +12,12 @@ export default function Header() {
         </Link>
       </div>
       <div className="flex-none flex item-center gap-2">
-        <Link
-          to="/tags"
-          className="btn btn-ghost btn-sm gap-1"
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={onOpenTagManager}
         >
           Tags
-        </Link>
+        </button>
         <Link
           to="/login"
           className="btn btn-ghost btn-sm"
