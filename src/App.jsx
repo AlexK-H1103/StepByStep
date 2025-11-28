@@ -1,7 +1,7 @@
 import Home from "./pages/Home";
 import GoalDetail from "./pages/GoalDetail";
 import GoalForm from "./pages/GoalForm";
-import Header from "./components/UI/Header";
+import Header from "./components/ui/Header";
 import TagManagerModal from "./components/Tag/TagManagerModal";
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
