@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ColorPalette, {
   getContrastTextColor,
-} from "../components/UI/ColorPalette";
+} from "../components/ui/ColorPalette";
 
 export default function GoalForm({ addGoal, availableTags, addTag }) {
   const [goalText, setGoalText] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const [steps, setSteps] = useState([{ id: crypto.randomUUID(), text: "" }]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [newTagName, setNewTagName] = useState("");
@@ -71,6 +72,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
       completed: false,
       steps: validSteps,
       tags: selectedTags,
+      dueDate: dueDate || null,
     };
 
     addGoal(newGoal);
@@ -95,6 +97,15 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
               placeholder="Enter your goal..."
               className="input input-bordered w-full"
               aria-label="New goal"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="font-medium">Due Date</label>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="input input-bordered w-full"
             />
           </div>
 

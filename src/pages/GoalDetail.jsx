@@ -2,7 +2,7 @@ import { useState } from "react";
 import StepForm from "../components/Step/StepForm";
 import StepList from "../components/Step/StepList";
 import TagModal from "../components/Tag/TagModal";
-import { getContrastTextColor } from "../components/UI/ColorPalette";
+import { getContrastTextColor } from "../components/ui/ColorPalette";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function GoalDetail({
@@ -11,11 +11,13 @@ export default function GoalDetail({
   removeGoal,
   availableTags,
   addTag,
+  statusColor,
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const goal = goals.find((g) => g.id === id);
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [isEditingDue, setIsEditingDue] = useState(false);
 
   if (!goal)
     return (
@@ -69,6 +71,25 @@ export default function GoalDetail({
       <div className="bg-base-100 shadow-lg rounded-xl p-6 w-full max-w-md space-y-5">
         <div className="flex justify-between items-start">
           <h2 className="text-2xl font-bold break-words">{goal.text}</h2>
+          {isEditingDue ? (
+            <input
+              type="date"
+              className="input input-bordered input-xs"
+              value={goal.dueDate || ""}
+              onChange={(e) =>
+                updateGoal({ ...goal, dueDate: e.target.value || null })
+              }
+              onBlur={() => setIsEditingDue(false)}
+              autoFocus
+            />
+          ) : (
+            <span
+              className={`text-sm cursor-pointer ${statusColor(goal.dueDate)}`}
+              onClick={() => setIsEditingDue(true)}
+            >
+              {goal.dueDate ? goal.dueDate : "No Due Date"}
+            </span>
+          )}
           <button
             className="btn btn-outline btn-error btn-xs"
             onClick={handleRemoveGoal}

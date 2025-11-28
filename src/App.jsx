@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useGoals } from "./hooks/useGoals";
 import { useTags } from "./hooks/useTags";
+import { useDate } from "./hooks/useDate";
 
 export default function App() {
   const { goals, addGoal, updateGoal, removeGoal, progressMap } = useGoals();
@@ -14,6 +15,14 @@ export default function App() {
     goals,
     updateGoal,
   });
+  const {
+    selectedDate,
+    setSelectedDate,
+    formatDate,
+    parseDate,
+    getToday,
+    getDeadlineColor,
+  } = useDate();
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
 
   return (
@@ -28,6 +37,7 @@ export default function App() {
                 goals={goals}
                 availableTags={availableTags}
                 progressMap={progressMap}
+                statusColor={getDeadlineColor}
               />
             }
           />
@@ -40,6 +50,7 @@ export default function App() {
                 removeGoal={removeGoal}
                 availableTags={availableTags}
                 addTag={addTag}
+                statusColor={getDeadlineColor}
               />
             }
           />

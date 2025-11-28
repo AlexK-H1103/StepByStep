@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import Progress from "../UI/Progress";
-import { getContrastTextColor } from "../UI/ColorPalette";
+import Progress from "../ui/Progress";
+import { getContrastTextColor } from "../ui/ColorPalette";
 
 export default function Goal({
   id,
@@ -9,6 +9,8 @@ export default function Goal({
   progress,
   tags = [],
   availableTags = [],
+  dueDate,
+  statusColor,
 }) {
   const navigate = useNavigate();
 
@@ -23,6 +25,16 @@ export default function Goal({
         <div className="flex flex-col flex-grow gap-2">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-semibold">{text}</h3>
+            {dueDate ? (
+              <span className={`text-sm font-medium ${statusColor(dueDate)}`}>
+                ({dueDate})
+              </span>
+            ) : (
+              <span className={`text-sm font-medium ${statusColor(dueDate)}`}>
+                (No due date)
+              </span>
+            )}
+
             {completed && (
               <span className="badge badge-success">Completed</span>
             )}

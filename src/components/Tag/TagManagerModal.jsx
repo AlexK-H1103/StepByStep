@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ColorPalette, { getContrastTextColor } from "../UI/ColorPalette";
+import ColorPalette, { getContrastTextColor } from "../ui/ColorPalette";
 import TagEditorPanel from "./TagEditorPanel";
 
 export default function TagManagerModal({

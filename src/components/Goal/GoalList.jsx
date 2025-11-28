@@ -5,6 +5,7 @@ export default function GoalList({
   emptyMessage,
   availableTags,
   progressMap,
+  statusColor,
 }) {
   if (!goals || goals.length === 0)
     return (
@@ -16,9 +17,14 @@ export default function GoalList({
       {goals.map((g) => (
         <Goal
           key={g.id}
+          id={g.id}
+          text={g.text}
+          completed={g.completed}
+          tags={g.tags}
+          dueDate={g.dueDate}
           progress={progressMap?.[g.id] ?? 0}
           availableTags={availableTags}
-          {...g}
+          statusColor={statusColor}
         />
       ))}
     </div>
