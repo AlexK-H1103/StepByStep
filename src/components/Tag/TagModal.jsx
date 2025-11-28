@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import ColorPalette, { getContrastTextColor } from "../UI/ColorPalette";
+import ColorPalette, { getContrastTextColor } from "../ui/ColorPalette";
 
 export default function TagModal({
   isOpen,

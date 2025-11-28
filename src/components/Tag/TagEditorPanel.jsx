@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ColorPalette from "../UI/ColorPalette";
+import ColorPalette from "../ui/ColorPalette";
 
 export default function TagEditorPanel({
   tag,

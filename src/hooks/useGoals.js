@@ -16,8 +16,6 @@ export const useGoals = () => {
     setGoals((prev) => prev.map((g) => (g.id === updated.id ? updated : g)));
   };
 
-  const findGoal = (id) => goals.find((g) => g.id === id);
-
   const calculateProgress = (goal) => {
     if (!goal || !goal.steps || goal.steps.length === 0)
       return goal?.completed ? 100 : 0;
@@ -52,8 +50,6 @@ export const useGoals = () => {
     addGoal,
     removeGoal,
     updateGoal,
-    findGoal,
-    calculateProgress,
     progressMap,
   };
 };

@@ -62,5 +62,3 @@ export default function ColorPalette({
     </div>
   );
 }
-
-ColorPalette.COLORS = PRESET_COLORS;
