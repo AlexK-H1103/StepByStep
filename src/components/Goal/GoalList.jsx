@@ -1,12 +1,11 @@
 import Goal from "./Goal";
 
-export default function GoalList({ goals, emptyMessage, availableTags }) {
-  const calculateProgress = (goal) => {
-    if (!goal.steps || goal.steps.length === 0) return goal.completed ? 100 : 0;
-    const completedSteps = goal.steps.filter((s) => s.completed).length;
-    return Math.round((completedSteps / goal.steps.length) * 100);
-  };
-
+export default function GoalList({
+  goals,
+  emptyMessage,
+  availableTags,
+  progressMap,
+}) {
   if (!goals || goals.length === 0)
     return (
       <p className="text-center text-gray-500 text-sm italic">{emptyMessage}</p>
@@ -17,7 +16,7 @@ export default function GoalList({ goals, emptyMessage, availableTags }) {
       {goals.map((g) => (
         <Goal
           key={g.id}
-          progress={calculateProgress(g)}
+          progress={progressMap?.[g.id] ?? 0}
           availableTags={availableTags}
           {...g}
         />

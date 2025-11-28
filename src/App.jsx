@@ -1,18 +1,24 @@
 import Home from "./pages/Home";
 import GoalDetail from "./pages/GoalDetail";
 import GoalForm from "./pages/GoalForm";
-import Header from "./components/Header";
+import Header from "./components/UI/Header";
+import TagManagerModal from "./components/Tag/TagManagerModal";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useGoals } from "./hooks/useGoals";
 import { useTags } from "./hooks/useTags";
 
 export default function App() {
-  const { goals, addGoal, updateGoal, removeGoal } = useGoals();
-  const { availableTags, addTag, removeTag } = useTags();
+  const { goals, addGoal, updateGoal, removeGoal, progressMap } = useGoals();
+  const { availableTags, addTag, updateTag, removeTag } = useTags({
+    goals,
+    updateGoal,
+  });
+  const [tagManagerOpen, setTagManagerOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-base-200">
-      <Header />
+      <Header onOpenTagManager={() => setTagManagerOpen(true)} />
       <main className="pt-6 px-4">
         <Routes>
           <Route
@@ -21,6 +27,7 @@ export default function App() {
               <Home
                 goals={goals}
                 availableTags={availableTags}
+                progressMap={progressMap}
               />
             }
           />
@@ -32,6 +39,7 @@ export default function App() {
                 updateGoal={updateGoal}
                 removeGoal={removeGoal}
                 availableTags={availableTags}
+                addTag={addTag}
               />
             }
           />
@@ -47,6 +55,14 @@ export default function App() {
           />
         </Routes>
       </main>
+      <TagManagerModal
+        isOpen={tagManagerOpen}
+        onClose={() => setTagManagerOpen(false)}
+        availableTags={availableTags}
+        updateTag={updateTag}
+        removeTag={removeTag}
+        addTag={addTag}
+      />
     </div>
   );
 }

@@ -1,20 +1,26 @@
 import { Link } from "react-router-dom";
 
-export default function Header() {
+export default function Header({ onOpenTagManager }) {
   return (
     <header className="navbar bg-base-100 shadow-lg px-6 py-4 mb-6 rounded-b-lg">
       <div className="flex-1">
         <Link
           to="/"
-          className="text-2xl font-bold text-600 hover:text-blue-800"
+          className="text-2xl font-bold text-600 hover:text-primary"
         >
           StepByStep
         </Link>
       </div>
-      <div className="flex-none gap-2">
+      <div className="flex-none flex item-center gap-2">
+        <button
+          className="btn btn-ghost btn-sm"
+          onClick={onOpenTagManager}
+        >
+          Tags
+        </button>
         <Link
           to="/login"
-          className="btn btn-ghost btn-sm text-gray-700 hover:text-blue-600"
+          className="btn btn-ghost btn-sm"
         >
           Login
         </Link>

@@ -14,7 +14,7 @@ export default function StepForm({ onAddStep }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-center gap-2 mt-3"
+      className="flex items-center gap-2 mt-2"
       aria-label="Add new step"
     >
       <input

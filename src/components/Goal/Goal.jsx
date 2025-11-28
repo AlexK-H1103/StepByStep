@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import Progress from "../Progress";
+import Progress from "../UI/Progress";
+import { getContrastTextColor } from "../UI/ColorPalette";
 
 export default function Goal({
   id,
@@ -36,7 +37,10 @@ export default function Goal({
                   <span
                     key={tag.id}
                     className="badge"
-                    style={{ backgroundColor: tag.color, color: "#fff" }}
+                    style={{
+                      backgroundColor: tag.color,
+                      color: getContrastTextColor(tag.color),
+                    }}
                   >
                     {tag.name}
                   </span>

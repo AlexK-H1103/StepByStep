@@ -2,7 +2,7 @@ import GoalList from "../components/Goal/GoalList";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Home({ goals, availableTags }) {
+export default function Home({ goals, availableTags, progressMap }) {
   const navigate = useNavigate();
 
   const TABS = {
@@ -46,6 +46,7 @@ export default function Home({ goals, availableTags }) {
             selectedTab === TABS.INCOMPLETE ? "All Done!" : "No Completed Goals"
           }
           availableTags={availableTags}
+          progressMap={progressMap}
         />
 
         <button
