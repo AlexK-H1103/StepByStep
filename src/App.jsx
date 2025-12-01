@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import { useGoals } from "./hooks/useGoals";
 import { useTags } from "./hooks/useTags";
 import { useDate } from "./hooks/useDate";
+import { useDailyStorage } from "./hooks/useDailyStorage";
 
 export default function App() {
   const { goals, addGoal, updateGoal, removeGoal, progressMap } = useGoals();
@@ -20,9 +21,13 @@ export default function App() {
     setSelectedDate,
     formatDate,
     parseDate,
-    getToday,
+    today,
+    resetToToday,
     getDeadlineColor,
   } = useDate();
+  const { todos, log, addTodo, toggleTodo, removeTodo, setLog } =
+    useDailyStorage();
+
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
 
   return (
@@ -38,6 +43,14 @@ export default function App() {
                 availableTags={availableTags}
                 progressMap={progressMap}
                 statusColor={getDeadlineColor}
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                todos={todos}
+                addTodo={addTodo}
+                removeTodo={removeTodo}
+                toggleTodo={toggleTodo}
+                log={log}
+                setLog={setLog}
               />
             }
           />

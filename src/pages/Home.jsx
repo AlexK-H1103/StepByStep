@@ -1,4 +1,7 @@
 import GoalList from "../components/Goal/GoalList";
+import TodoList from "../components/Todo/TodoList";
+import TodoForm from "../components/Todo/TodoForm";
+import LogInput from "../components/LogInput";
 import MiniCalendar from "../components/Calendar/MiniCalendar";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +11,22 @@ export default function Home({
   availableTags,
   progressMap,
   statusColor,
+  selectedDate,
+  setSelectedDate,
+  todos,
+  addTodo,
+  removeTodo,
+  toggleTodo,
+  log,
+  setLog,
 }) {
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleAddTodo = (text) => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    addTodo(trimmed);
+  };
 
   const TABS = {
     INCOMPLETE: "incomplete",
@@ -47,6 +63,12 @@ export default function Home({
               Complete
             </a>
           </div>
+          {/* <TodoList
+            todos={todos}
+            onToggleTodo={toggleTodo}
+            onRemoveTodo={removeTodo}
+          />
+          <TodoForm onAddTodo={handleAddTodo} /> */}
 
           <GoalList
             goals={displayedGoals}
@@ -66,6 +88,10 @@ export default function Home({
           >
             Add New Goal
           </button>
+          {/* <LogInput
+            value={log}
+            onChange={setLog}
+          /> */}
         </div>
         <div className="flex-[1] flex justify-center">
           <MiniCalendar
