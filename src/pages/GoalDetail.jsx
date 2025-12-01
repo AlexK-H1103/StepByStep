@@ -46,8 +46,10 @@ export default function GoalDetail({
   };
 
   const handleRemoveGoal = () => {
-    removeGoal(goal.id);
-    navigate("/");
+    if (window.confirm("Delete this goal completely?")) {
+      removeGoal(goal.id);
+      navigate("/");
+    }
   };
 
   const handleToggleStep = (stepId) => {
@@ -99,12 +101,6 @@ export default function GoalDetail({
         </div>
 
         <div className="space-y-2">
-          <button
-            className="btn btn-sm btn-outline"
-            onClick={() => setIsTagModalOpen(true)}
-          >
-            Edit Tags
-          </button>
           <div className="flex flex-wrap gap-2">
             {goal.tags?.length > 0 ? (
               goal.tags.map((tagId) => {
@@ -126,6 +122,12 @@ export default function GoalDetail({
             ) : (
               <span className="text-gray-400 italic text-sm">No tags</span>
             )}
+            <button
+              className="btn btn-sm btn-outline px-2 py-1"
+              onClick={() => setIsTagModalOpen(true)}
+            >
+              Edit Tags
+            </button>
           </div>
         </div>
 
