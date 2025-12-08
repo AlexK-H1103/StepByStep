@@ -1,48 +1,68 @@
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 
 export const useGoals = () => {
   const [goals, setGoals] = useLocalStorage("goals", []);
 
-  const addGoal = (newGoal) => {
-    setGoals((prev) => [...prev, newGoal]);
+  const createGoal = (goal) => ({
+    id: goal.id || crypto.randomUUID(),
+    text: goal.text || "",
+    dueDate: goal.dueDate || null,
+    completed: goal.completed || false,
+    steps: Array.isArray(goal.steps) ? goal.steps : [],
+    tags: Array.isArray(goal.tags) ? goal.tags : [],
+    createdAt: goal.createdAt || Date.now(),
+  });
+
+  const addGoal = (goal) => {
+    setGoals((prev) => [...prev, createGoal(goal)]);
   };
 
   const removeGoal = (id) => {
     setGoals((prev) => prev.filter((g) => g.id !== id));
   };
 
-  const updateGoal = (updated) => {
-    setGoals((prev) => prev.map((g) => (g.id === updated.id ? updated : g)));
+  const updateGoal = (updatedGoal) => {
+    setGoals((prev) =>
+      prev.map((g) => (g.id === updatedGoal.id ? createGoal(updatedGoal) : g))
+    );
   };
 
-  const calculateProgress = (goal) => {
-    if (!goal || !goal.steps || goal.steps.length === 0)
+  const calculateProgress = useCallback((goal) => {
+    if (!goal?.steps?.length) {
       return goal?.completed ? 100 : 0;
+    }
     const completed = goal.steps.filter((s) => s.completed).length;
     return Math.round((completed / goal.steps.length) * 100);
-  };
+  }, []);
 
   const progressMap = useMemo(() => {
     const map = {};
     goals.forEach((g) => {
-      if (!g?.id) return;
       map[g.id] = calculateProgress(g);
     });
     return map;
-  }, [goals]);
+  }, [goals, calculateProgress]);
+
+  const removeTagFromGoals = (tagId) => {
+    setGoals((prev) =>
+      prev.map((g) => ({
+        ...g,
+        tags: g.tags?.filter((id) => id !== tagId),
+      }))
+    );
+  };
 
   useEffect(() => {
-    const fixedGoals = goals.map((g) => ({
-      ...g,
-      steps: Array.isArray(g.steps) ? g.steps : [],
-      tags: Array.isArray(g.tags) ? g.tags : [],
-    }));
+    let fixed = false;
+    const sanitized = goals.map((g) => {
+      const correct = createGoal(g);
+      if (JSON.stringify(g) !== JSON.stringify(correct)) fixed = true;
+      return correct;
+    });
 
-    if (JSON.stringify(fixedGoals) !== JSON.stringify(goals)) {
-      setGoals(fixedGoals);
-    }
-  }, [goals]);
+    if (fixed) setGoals(sanitized);
+  }, [goals, setGoals]);
 
   return {
     goals,
@@ -50,6 +70,8 @@ export const useGoals = () => {
     addGoal,
     removeGoal,
     updateGoal,
+    calculateProgress,
     progressMap,
+    removeTagFromGoals,
   };
 };

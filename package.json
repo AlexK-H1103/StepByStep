@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.15",
     "daisyui": "^5.3.8",
+    "lucide-react": "^0.555.0",
     "react": "^19.1.1",
     "react-day-picker": "^9.11.2",
     "react-dom": "^19.1.1",
@@ -28,5 +29,18 @@
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
     "vite": "^7.1.7"
-  }
+  },
+  "description": "_Achieve big goals through small, steady steps._",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexK-H1103/StepByStep.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexK-H1103/StepByStep/issues"
+  },
+  "homepage": "https://github.com/AlexK-H1103/StepByStep#readme"
 }

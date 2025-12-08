@@ -1,84 +1,110 @@
 import Home from "./pages/Home";
+import Goals from "./pages/Goals";
 import GoalDetail from "./pages/GoalDetail";
 import GoalForm from "./pages/GoalForm";
-import Header from "./components/ui/Header";
+import Layout from "./components/Layout/Layout";
 import TagManagerModal from "./components/Tag/TagManagerModal";
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useGoals } from "./hooks/useGoals";
+import { useSteps } from "./hooks/useSteps";
 import { useTags } from "./hooks/useTags";
 import { useDate } from "./hooks/useDate";
 import { useDailyStorage } from "./hooks/useDailyStorage";
 
 export default function App() {
-  const { goals, addGoal, updateGoal, removeGoal, progressMap } = useGoals();
-  const { availableTags, addTag, updateTag, removeTag } = useTags({
-    goals,
-    updateGoal,
-  });
   const {
-    selectedDate,
-    setSelectedDate,
+    goals,
+    addGoal,
+    updateGoal,
+    removeGoal,
+    progressMap,
+    removeTagFromGoals,
+  } = useGoals();
+
+  const { toggleGoalAndSteps, addStep, toggleStep, removeStep } = useSteps(
+    goals,
+    updateGoal
+  );
+
+  const { availableTags, addTag, updateTag, removeTag } =
+    useTags(removeTagFromGoals);
+
+  const {
     formatDate,
     parseDate,
-    today,
-    resetToToday,
+    getToday,
+    getTodayKey,
+    getDaysLeft,
     getDeadlineColor,
   } = useDate();
-  const { todos, log, addTodo, toggleTodo, removeTodo, setLog } =
+
+  const { daily, todos, log, addTodo, toggleTodo, removeTodo, setLog } =
     useDailyStorage();
 
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-base-200">
-      <Header onOpenTagManager={() => setTagManagerOpen(true)} />
-      <main className="pt-6 px-4">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                goals={goals}
-                availableTags={availableTags}
-                progressMap={progressMap}
-                statusColor={getDeadlineColor}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                todos={todos}
-                addTodo={addTodo}
-                removeTodo={removeTodo}
-                toggleTodo={toggleTodo}
-                log={log}
-                setLog={setLog}
-              />
-            }
-          />
-          <Route
-            path="/goals/:id"
-            element={
-              <GoalDetail
-                goals={goals}
-                updateGoal={updateGoal}
-                removeGoal={removeGoal}
-                availableTags={availableTags}
-                addTag={addTag}
-                statusColor={getDeadlineColor}
-              />
-            }
-          />
-          <Route
-            path="/addGoal"
-            element={
-              <GoalForm
-                addGoal={addGoal}
-                availableTags={availableTags}
-                addTag={addTag}
-              />
-            }
-          />
-        </Routes>
-      </main>
+    <Layout onOpenTagManager={() => setTagManagerOpen(true)}>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              goals={goals}
+              availableTags={availableTags}
+              progressMap={progressMap}
+              statusColor={getDeadlineColor}
+              todos={todos}
+              addTodo={addTodo}
+              removeTodo={removeTodo}
+              toggleTodo={toggleTodo}
+              log={log}
+              setLog={setLog}
+            />
+          }
+        />
+        <Route
+          path="/goals"
+          element={
+            <Goals
+              goals={goals}
+              availableTags={availableTags}
+              progressMap={progressMap}
+              statusColor={getDeadlineColor}
+            />
+          }
+        />
+        <Route
+          path="/goals/:id"
+          element={
+            <GoalDetail
+              goals={goals}
+              availableTags={availableTags}
+              updateGoal={updateGoal}
+              removeGoal={removeGoal}
+              addTag={addTag}
+              updateTag={updateTag}
+              toggleGoalAndSteps={toggleGoalAndSteps}
+              addStep={addStep}
+              toggleStep={toggleStep}
+              removeStep={removeStep}
+              statusColor={getDeadlineColor}
+            />
+          }
+        />
+        <Route
+          path="/addGoal"
+          element={
+            <GoalForm
+              addGoal={addGoal}
+              availableTags={availableTags}
+              addTag={addTag}
+            />
+          }
+        />
+      </Routes>
+
       <TagManagerModal
         isOpen={tagManagerOpen}
         onClose={() => setTagManagerOpen(false)}
@@ -87,6 +113,6 @@ export default function App() {
         removeTag={removeTag}
         addTag={addTag}
       />
-    </div>
+    </Layout>
   );
 }

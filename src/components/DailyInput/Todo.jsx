@@ -1,7 +1,7 @@
 export default function Todo({ todo, onToggleTodo, onRemoveTodo }) {
   return (
     <div
-      className={`flex items-center justify-between gap-2 rounded-lg border border-base-300 p-2 ${
+      className={`flex items-center justify-between gap-2 text-gray-600 bg-violet-100 rounded-lg border border-base-300 p-2 ${
         todo.completed ? "opacity-70" : ""
       }`}
     >

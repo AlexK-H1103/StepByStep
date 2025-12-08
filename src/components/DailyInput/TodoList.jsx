@@ -5,12 +5,12 @@ export default function TodoList({ todos, onToggleTodo, onRemoveTodo }) {
   const complete = todos.filter((t) => t.completed);
 
   if (todos.length === 0)
-    return <p className="text-gray-500 text-sm italic">No todos for today</p>;
+    return <p className="text-gray-500 text-sm italic">Nothing todo?</p>;
 
   return (
     <div className="space-y-6">
       <section>
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">Todo List</h3>
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">Incomplete</h3>
         {incomplete.length ? (
           <div className="space-y-2">
             {incomplete.map((t) => (
@@ -23,7 +23,7 @@ export default function TodoList({ todos, onToggleTodo, onRemoveTodo }) {
             ))}
           </div>
         ) : (
-          <p className="text-gray-400 text-sm italic">All todos completed!</p>
+          <p className="text-gray-400 text-sm italic">All done for today!</p>
         )}
       </section>
 
@@ -41,7 +41,7 @@ export default function TodoList({ todos, onToggleTodo, onRemoveTodo }) {
             ))}
           </div>
         ) : (
-          <p className="text-gray-400 text-sm italic">No completed todos</p>
+          <p className="text-gray-400 text-sm italic">In progress...</p>
         )}
       </section>
     </div>

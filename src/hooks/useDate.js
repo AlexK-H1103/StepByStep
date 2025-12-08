@@ -1,74 +1,51 @@
-import { useState, useCallback } from "react";
-
-function formatDate(date) {
-  if (!date) return "";
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
-
-function parseDate(dateString) {
-  if (!dateString) return null;
-  const [year, month, day] = dateString.split("-");
-  return new Date(year, month - 1, day);
-}
-
 export const useDate = () => {
-  const getToday = useCallback(() => {
-    const now = new Date();
-    const jstOffset = 9 * 60;
-    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-    const jstTime = utc + jstOffset * 60000;
-    const jst = new Date(jstTime);
-    jst.setHours(0, 0, 0, 0);
-    return jst;
-  }, []);
+  const formatDate = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString().slice(0, 10);
+  };
 
-  const [selectedDate, setSelectedDate] = useState(getToday());
+  const parseDate = (str) => {
+    if (!str) return null;
+    const [y, m, d] = str.split("-");
+    return new Date(y, m - 1, d);
+  };
 
-  const resetToToday = useCallback(() => {
-    setSelectedDate(getToday());
-  }, [getToday]);
+  const getToday = () => {
+    const t = new Date();
+    t.setHours(0, 0, 0, 0);
+    return t;
+  };
 
-  const getDaysLeft = useCallback(
-    (dueDate) => {
-      if (!dueDate) return null;
+  const getTodayKey = () => formatDate(getToday());
 
-      const today = getToday();
-      const target = new Date(dueDate);
-      target.setHours(0, 0, 0, 0);
+  const getDaysLeft = (dueDate) => {
+    if (!dueDate) return null;
 
-      const diff = target - today;
-      return Math.ceil(diff / (1000 * 60 * 60 * 24));
-    },
-    [getToday]
-  );
+    const today = getToday();
+    const target = new Date(dueDate);
+    target.setHours(0, 0, 0, 0);
 
-  const getDeadlineColor = useCallback(
-    (dueDate) => {
-      const days = getDaysLeft(dueDate);
+    const diff = target - today;
+    return Math.ceil(diff / 86400000);
+  };
 
-      if (days === null) return "text-base-content/30";
-      if (days <= 3) return "text-error";
-      if (days <= 7) return "text-warning";
+  const getDeadlineColor = (dueDate) => {
+    const days = getDaysLeft(dueDate);
 
-      return "text-base-content";
-    },
-    [getDaysLeft]
-  );
+    if (days === null) return "text-gray-500";
+    if (days <= 3) return "text-error";
+    if (days <= 7) return "text-warning";
+
+    return "text-gray-300";
+  };
 
   return {
-    selectedDate,
-    setSelectedDate,
-    today: getToday(),
     formatDate,
     parseDate,
-    resetToToday,
+    getToday,
+    getTodayKey,
     getDaysLeft,
     getDeadlineColor,
   };
