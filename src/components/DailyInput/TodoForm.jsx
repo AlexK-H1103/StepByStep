@@ -15,15 +15,15 @@ export default function TodoForm({ onAddTodo }) {
     <form
       onSubmit={handleSubmit}
       className="flex items-center gap-2 mt-2"
-      aria-label="Add new Todo"
+      aria-label="TodoForm"
     >
       <input
         type="text"
         name="Todo"
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder="Add new Todo..."
-        className="input input-bordered input-sm flex-grow"
+        placeholder="Add todo"
+        className="input input-bordered text-gray-400 bg-violet-100 input-sm flex-grow"
       />
       <button
         type="submit"

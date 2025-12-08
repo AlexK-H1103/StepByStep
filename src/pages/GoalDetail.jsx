@@ -21,7 +21,7 @@ export default function GoalDetail({
 
   if (!goal)
     return (
-      <div className="min-h-screen bg-base-200 flex justify-center items-center">
+      <div className="min-h-screen bg-gray-800 flex justify-center items-center">
         <p className="text-gray-500">Goal not found</p>
       </div>
     );
@@ -69,10 +69,12 @@ export default function GoalDetail({
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex justify-center items-start py-10">
-      <div className="bg-base-100 shadow-lg rounded-xl p-6 w-full max-w-md space-y-5">
+    <div className="min-h-screen flex justify-center items-start py-10">
+      <div className="bg-gray-800/95 border border-gray-700 rounded-2xl shadow-lg p-6 w-full max-w-md space-y-5">
         <div className="flex justify-between items-start">
-          <h2 className="text-2xl font-bold break-words">{goal.text}</h2>
+          <h2 className="text-2xl font-semibold text-violet-300 break-words">
+            {goal.text}
+          </h2>
           {isEditingDue ? (
             <input
               type="date"
@@ -156,14 +158,14 @@ export default function GoalDetail({
             </span>
           </p>
           <button
-            className="btn btn-sm btn-neutral"
+            className="btn btn-sm bg-violet-600 hover:bg-violet-700 text-white rounded-xl"
             onClick={handleToggleGoalAndSteps}
           >
             {goal.completed ? "Mark as Incomplete" : "Mark as Complete"}
           </button>
         </div>
 
-        <div className="divider my-3">Steps</div>
+        <div className="divider text-gray-300 my-3">Steps</div>
 
         <StepForm onAddStep={handleAddStep} />
         <StepList
@@ -174,8 +176,8 @@ export default function GoalDetail({
 
         <div className="pt-4">
           <button
-            className="btn btn-neutral w-full"
-            onClick={() => navigate("/")}
+            className="btn bg-violet-600 hover:bg-violet-700 text-white rounded-xl w-full"
+            onClick={() => navigate("/goals")}
           >
             ← Back to Goals
           </button>

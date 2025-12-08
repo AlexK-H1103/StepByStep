@@ -1,11 +1,11 @@
 export default function Step({ step, onToggleStep, onRemoveStep }) {
   return (
     <div
-      className={`flex items-center justify-between gap-2 rounded-lg border border-base-300 p-2 ${
+      className={`flex items-center justify-between gap-2 text-gray-600 bg-violet-100 rounded-lg border border-gray-700 p-2 ${
         step.completed ? "opacity-70" : ""
       }`}
     >
-      <label className="flex items-center gap-2 flex-grow cursor-pointer">
+      <label className="flex items-center gap-2 flex-grow cursor-pointer ">
         <input
           type="checkbox"
           className="checkbox checkbox-neutral"

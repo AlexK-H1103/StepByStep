@@ -13,7 +13,7 @@ export const useDailyStorage = () => {
     const newTodo = {
       id: crypto.randomUUID(),
       text,
-      done: false,
+      completed: false,
     };
     setDaily((prev) => ({
       ...prev,
@@ -24,7 +24,9 @@ export const useDailyStorage = () => {
   const toggleTodo = (id) => {
     setDaily((prev) => ({
       ...prev,
-      todos: prev.todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t)),
+      todos: prev.todos.map((t) =>
+        t.id === id ? { ...t, completed: !t.completed } : t
+      ),
     }));
   };
 

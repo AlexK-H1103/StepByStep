@@ -196,7 +196,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
             <button
               type="button"
               className="btn btn-outline w-full"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/goals")}
             >
               ← Back to Goals
             </button>

@@ -23,11 +23,11 @@ export default function StepForm({ onAddStep }) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Add new step..."
-        className="input input-bordered input-sm flex-grow"
+        className="input input-bordered text-gray-400 bg-violet-100 input-sm flex-grow"
       />
       <button
         type="submit"
-        className="btn btn-sm btn-neutral"
+        className="btn btn-sm bg-violet-600 hover:bg-violet-700 text-white rounded-xl"
       >
         Add
       </button>
