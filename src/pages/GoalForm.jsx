@@ -31,10 +31,11 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     setSelectedTags((prev) => {
       if (prev.includes(tagId)) {
         return prev.filter((id) => id !== tagId);
-      } else if (prev.length < 3) {
-        return [...prev, tagId];
       }
-      return prev;
+      if (prev.length >= 3) {
+        return prev;
+      }
+      return [...prev, tagId];
     });
   };
 
@@ -61,7 +62,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     const validSteps = steps
       .filter((s) => s.text.trim() !== "")
       .map((s) => ({
-        id: crypto.randomUUID(),
+        id: s.id,
         text: s.text.trim(),
         completed: false,
       }));
@@ -76,13 +77,19 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     };
 
     addGoal(newGoal);
+    setGoalText("");
+    setDueDate("");
+    setSteps([{ id: crypto.randomUUID(), text: "" }]);
+    setSelectedTags([]);
     navigate(`/goals/${newGoal.id}`);
   };
 
   return (
-    <div className="min-h-screen bg-base-200 flex justify-center items-start py-10">
-      <div className="bg-base-100 shadow-lg rounded-xl p-6 w-full max-w-md space-y-6">
-        <h2 className="text-xl font-semibold text-center">Create New Goal</h2>
+    <div className="min-h-screen flex justify-center items-start py-10">
+      <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-lg p-6 w-full max-w-md space-y-5">
+        <h2 className="text-xl text-gray-100 font-semibold text-center">
+          Create New Goal
+        </h2>
 
         <form
           onSubmit={handleSubmit}
@@ -95,7 +102,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
               value={goalText}
               onChange={(e) => setGoalText(e.target.value)}
               placeholder="Enter your goal..."
-              className="input input-bordered w-full"
+              className="input text-gray-500 input-bordered w-full"
               aria-label="New goal"
             />
           </div>
@@ -105,7 +112,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="input input-bordered w-full"
+              className="input text-gray-500 input-bordered w-full"
             />
           </div>
 
@@ -119,7 +126,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
                   value={step.text}
                   onChange={(e) => handleStepChange(step.id, e.target.value)}
                   placeholder={`Step ${i + 1}`}
-                  className="input input-bordered w-full"
+                  className="input text-gray-500 input-bordered w-full"
                 />
               ))}
             </div>
@@ -134,7 +141,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
                 value={newTagName}
                 onChange={(e) => setNewTagName(e.target.value)}
                 placeholder="New tag name"
-                className="input input-bordered flex-1"
+                className="input text-gray-500 input-bordered flex-1"
               />
               <div className="relative">
                 <div
@@ -143,7 +150,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
                   onClick={() => setShowPalette(!showPalette)}
                 />
                 {showPalette && (
-                  <div className="absolute top-10 left-0 z-10 p-2 bg-base-100 rounded shadow-md">
+                  <div className="absolute top-10 left-0 z-10 p-2 bg-gray-900 rounded shadow-md">
                     <ColorPalette
                       value={newTagColor}
                       onChange={(color) => {
@@ -158,7 +165,8 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
               </div>
               <button
                 type="button"
-                className="btn btn-sm btn-neutral"
+                disabled={!newTagName.trim()}
+                className="btn btn-sm bg-violet-600 hover:bg-violet-700 text-white rounded-xl disabled:bg-gray-400"
                 onClick={handleAddNewTag}
               >
                 Add
@@ -189,13 +197,14 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
           <div className="flex flex-col gap-3 pt-2">
             <button
               type="submit"
-              className="btn btn-neutral w-full"
+              disabled={!goalText.trim()}
+              className="btn bg-violet-600 hover:bg-violet-700 text-white rounded-xl disabled:bg-gray-400 w-full"
             >
               Add Goal
             </button>
             <button
               type="button"
-              className="btn btn-outline w-full"
+              className="btn btn-outline text-white rounded-xl w-full"
               onClick={() => navigate("/goals")}
             >
               ← Back to Goals

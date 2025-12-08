@@ -1,15 +1,30 @@
 import { useLocalStorage } from "./useLocalStorage";
-import { useGoals } from "./useGoals";
 
-export const useTags = () => {
+export const useTags = (removeTagFromGoals) => {
   const [availableTags, setAvailableTags] = useLocalStorage("tags", []);
-  const { goals, updateGoal } = useGoals();
+
+  const validateTag = (tag) => {
+    return tag && typeof tag.id === "string" && typeof tag.name === "string";
+  };
 
   const addTag = (tag) => {
-    setAvailableTags((prev) => [...prev, tag]);
+    if (!validateTag(tag)) {
+      console.error("Invalid tag structure:", tag);
+      return;
+    }
+
+    setAvailableTags((prev) => {
+      if (prev.some((t) => t.id === tag.id)) {
+        console.warn("Tag already exists:", tag.id);
+        return prev;
+      }
+      return [...prev, tag];
+    });
   };
 
   const updateTag = (updated) => {
+    if (!validateTag(updated)) return;
+
     setAvailableTags((prev) =>
       prev.map((t) => (t.id === updated.id ? updated : t))
     );
@@ -17,18 +32,15 @@ export const useTags = () => {
 
   const removeTag = (tagId) => {
     setAvailableTags((prev) => prev.filter((t) => t.id !== tagId));
-
-    if (updateGoal && goals.length) {
-      goals.forEach((goal) => {
-        if (goal.tags?.includes(tagId)) {
-          updateGoal({
-            ...goal,
-            tags: goal.tags.filter((id) => id !== tagId),
-          });
-        }
-      });
+    if (typeof removeTagFromGoals === "function") {
+      removeTagFromGoals(tagId);
     }
   };
 
-  return { availableTags, addTag, updateTag, removeTag };
+  return {
+    availableTags,
+    addTag,
+    updateTag,
+    removeTag,
+  };
 };

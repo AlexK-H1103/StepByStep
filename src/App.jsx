@@ -7,26 +7,39 @@ import TagManagerModal from "./components/Tag/TagManagerModal";
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useGoals } from "./hooks/useGoals";
+import { useSteps } from "./hooks/useSteps";
 import { useTags } from "./hooks/useTags";
 import { useDate } from "./hooks/useDate";
 import { useDailyStorage } from "./hooks/useDailyStorage";
 
 export default function App() {
-  const { goals, addGoal, updateGoal, removeGoal, progressMap } = useGoals();
-  const { availableTags, addTag, updateTag, removeTag } = useTags({
-    goals,
-    updateGoal,
-  });
   const {
-    selectedDate,
-    setSelectedDate,
+    goals,
+    addGoal,
+    updateGoal,
+    removeGoal,
+    progressMap,
+    removeTagFromGoals,
+  } = useGoals();
+
+  const { toggleGoalAndSteps, addStep, toggleStep, removeStep } = useSteps(
+    goals,
+    updateGoal
+  );
+
+  const { availableTags, addTag, updateTag, removeTag } =
+    useTags(removeTagFromGoals);
+
+  const {
     formatDate,
     parseDate,
-    today,
-    resetToToday,
+    getToday,
+    getTodayKey,
+    getDaysLeft,
     getDeadlineColor,
   } = useDate();
-  const { todos, log, addTodo, toggleTodo, removeTodo, setLog } =
+
+  const { daily, todos, log, addTodo, toggleTodo, removeTodo, setLog } =
     useDailyStorage();
 
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
@@ -42,8 +55,6 @@ export default function App() {
               availableTags={availableTags}
               progressMap={progressMap}
               statusColor={getDeadlineColor}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
               todos={todos}
               addTodo={addTodo}
               removeTodo={removeTodo}
@@ -69,10 +80,15 @@ export default function App() {
           element={
             <GoalDetail
               goals={goals}
+              availableTags={availableTags}
               updateGoal={updateGoal}
               removeGoal={removeGoal}
-              availableTags={availableTags}
               addTag={addTag}
+              updateTag={updateTag}
+              toggleGoalAndSteps={toggleGoalAndSteps}
+              addStep={addStep}
+              toggleStep={toggleStep}
+              removeStep={removeStep}
               statusColor={getDeadlineColor}
             />
           }

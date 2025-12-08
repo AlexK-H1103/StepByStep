@@ -3,21 +3,37 @@ import { useLocalStorage } from "./useLocalStorage";
 
 export const useDailyStorage = () => {
   const [daily, setDaily] = useLocalStorage("daily", {
+    date: "",
     todos: [],
     log: "",
   });
 
   const { todos, log } = daily;
 
+  useEffect(() => {
+    const today = new Date().toISOString().slice(0, 10);
+
+    if (daily.date !== today) {
+      setDaily({
+        date: today,
+        todos: [],
+        log: "",
+      });
+    }
+  }, []);
+
   const addTodo = (text) => {
-    const newTodo = {
-      id: crypto.randomUUID(),
-      text,
-      completed: false,
-    };
     setDaily((prev) => ({
       ...prev,
-      todos: [...prev.todos, newTodo],
+      todos: [
+        ...prev.todos,
+        {
+          id: crypto.randomUUID(),
+          text,
+          completed: false,
+          createdAt: Date.now(),
+        },
+      ],
     }));
   };
 
@@ -38,24 +54,21 @@ export const useDailyStorage = () => {
   };
 
   const setLog = (text) => {
-    setDaily((prev) => ({
-      ...prev,
-      log: text,
-    }));
+    setDaily((prev) => ({ ...prev, log: text }));
   };
 
   useEffect(() => {
-    const fixedDaily = {
-      todos: Array.isArray(daily.todos) ? daily.todos : [],
-      log: typeof daily.log === "string" ? daily.log : "",
-    };
-
-    if (JSON.stringify(fixedDaily) !== JSON.stringify(daily)) {
-      setDaily(fixedDaily);
+    if (!Array.isArray(daily.todos) || typeof daily.log !== "string") {
+      setDaily({
+        ...daily,
+        todos: Array.isArray(daily.todos) ? daily.todos : [],
+        log: typeof daily.log === "string" ? daily.log : "",
+      });
     }
   }, [daily]);
 
   return {
+    daily,
     todos,
     log,
     addTodo,
