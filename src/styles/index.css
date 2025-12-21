@@ -1,2 +1,14 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.goal-dot::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #ef1b1b;
+  border-radius: 50%;
+}

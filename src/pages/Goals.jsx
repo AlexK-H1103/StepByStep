@@ -1,13 +1,9 @@
 import GoalList from "../components/Goal/GoalList";
+import { getDeadlineColor } from "../utils/dateUtils";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Goals({
-  goals,
-  availableTags,
-  progressMap,
-  statusColor,
-}) {
+export default function Goals({ goals, availableTags, progressMap }) {
   const navigate = useNavigate();
 
   const TABS = {
@@ -24,8 +20,7 @@ export default function Goals({
     selectedTab === TABS.INCOMPLETE ? incompleteGoals : completeGoals;
 
   return (
-    <div className="bg-gray-800/95 border border-gray-700 rounded-2xl p-6 shadow-lg">
-      {/* Tabs */}
+    <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-lg">
       <div className="flex border-b border-gray-700 mb-4">
         <button
           className={`px-4 py-2 font-semibold transition-all border-b-2
@@ -51,20 +46,22 @@ export default function Goals({
         </button>
       </div>
 
-      {/* Goals */}
       <div className="space-y-3">
         <GoalList
           goals={displayedGoals}
           emptyMessage={
-            selectedTab === TABS.INCOMPLETE ? "All Done!" : "No Completed Goals"
+            goals.length === 0
+              ? "No Goals"
+              : selectedTab === TABS.INCOMPLETE
+              ? "All Done!"
+              : "No Completed Goals"
           }
           availableTags={availableTags}
           progressMap={progressMap}
-          statusColor={statusColor}
+          statusColor={getDeadlineColor}
         />
       </div>
 
-      {/* Add Goal Button */}
       <div className="mt-6">
         <button
           className="btn w-full bg-violet-600 hover:bg-violet-700 text-white rounded-xl"

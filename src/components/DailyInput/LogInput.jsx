@@ -1,10 +1,18 @@
 export default function LogInput({ value, onChange }) {
   return (
-    <textarea
-      className="w-full p-2 border rounded text-black bg-violet-100"
-      placeholder="How was your day..."
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
+    <div className="flex items-center gap-2 mt-2">
+      <textarea
+        className="w-full p-2 border rounded text-black bg-violet-100"
+        placeholder="How was your day..."
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {/* <button
+        type="submit"
+        className="btn btn-sm bg-violet-600 hover:bg-violet-700 text-white rounded-xl"
+      >
+        Done
+      </button> */}
+    </div>
   );
 }

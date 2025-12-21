@@ -22,11 +22,15 @@ export const useGoals = () => {
     setGoals((prev) => prev.filter((g) => g.id !== id));
   };
 
-  const updateGoal = (updatedGoal) => {
+  const updateGoal = (updated) => {
     setGoals((prev) =>
-      prev.map((g) => (g.id === updatedGoal.id ? createGoal(updatedGoal) : g))
+      prev.map((g) => (g.id === updated.id ? { ...g, ...updated } : g))
     );
   };
+
+  const dueDates = goals
+    .filter((g) => g.dueDate)
+    .map((g) => new Date(g.dueDate));
 
   const calculateProgress = useCallback((goal) => {
     if (!goal?.steps?.length) {
@@ -70,6 +74,7 @@ export const useGoals = () => {
     addGoal,
     removeGoal,
     updateGoal,
+    dueDates,
     calculateProgress,
     progressMap,
     removeTagFromGoals,
