@@ -52,7 +52,7 @@ export default function App() {
       <pre style="white-space:pre-wrap;color:red;padding:16px;">
 ${msg}
 
-${err?.stack || ""}
+${err && err.stack ? err.stack : ""}
       </pre>
     `;
     };
