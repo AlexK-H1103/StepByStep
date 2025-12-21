@@ -1,5 +1,6 @@
 import { useMemo, useEffect, useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
+import { parseDate } from "../utils/dateUtils";
 import { generateId } from "../utils/generatedId";
 
 export const useGoals = () => {
@@ -31,7 +32,7 @@ export const useGoals = () => {
 
   const dueDates = goals
     .filter((g) => g.dueDate)
-    .map((g) => new Date(g.dueDate));
+    .map((g) => parseDate(g.dueDate));
 
   const calculateProgress = useCallback((goal) => {
     if (!goal?.steps?.length) {
