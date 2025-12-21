@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 
 const getToday = () => new Date().toISOString().slice(0, 10);
-const createDaily = (date = getToday) => ({
-  date,
-  todos: [],
-  log: "",
-  isDone: false,
+const createDaily = (daily = {}) => ({
+  date: daily.date ?? getToday(),
+  todos: Array.isArray(daily.todos) ? daily.todos : [],
+  log: daily.log ?? "",
+  isDone: !!daily.isDone,
 });
 
 export const useDailyStorage = () => {
