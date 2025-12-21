@@ -9,17 +9,14 @@ export default function Header({ onToggleSidebar }) {
       border-b border-violet-300/20 
       px-6 py-3 flex items-center justify-between text-gray-100"
     >
-      {/* 左：ロゴ ＋ モバイルメニュー */}
       <div className="flex items-center gap-3">
-        {/* Mobile Hamburger */}
         <button
-          className="md:hidden p-2 rounded hover:bg-violet-500/20 transition"
+          className="lg:hidden p-2 rounded hover:bg-violet-500/20 transition"
           onClick={onToggleSidebar}
         >
           <Menu size={20} />
         </button>
 
-        {/* Logo */}
         <Link
           to="/"
           className="text-2xl font-bold text-violet-300 hover:text-violet-400 transition"
@@ -28,7 +25,6 @@ export default function Header({ onToggleSidebar }) {
         </Link>
       </div>
 
-      {/* 右：Login / Register */}
       <div className="flex items-center gap-2">
         <Link
           to="/login"

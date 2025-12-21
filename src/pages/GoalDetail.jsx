@@ -1,8 +1,9 @@
-import { useState } from "react";
 import StepForm from "../components/Step/StepForm";
 import StepList from "../components/Step/StepList";
 import TagManagerModal from "../components/Tag/TagManagerModal";
 import { getContrastTextColor } from "../components/ui/ColorPalette";
+import { getDeadlineColor } from "../utils/dateUtils";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function GoalDetail({
@@ -17,7 +18,6 @@ export default function GoalDetail({
   addStep,
   toggleStep,
   removeStep,
-  statusColor,
 }) {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -61,7 +61,9 @@ export default function GoalDetail({
             />
           ) : (
             <span
-              className={`text-sm cursor-pointer ${statusColor(goal.dueDate)}`}
+              className={`text-sm cursor-pointer ${getDeadlineColor(
+                goal.dueDate
+              )}`}
               onClick={() => setIsEditingDue(true)}
             >
               {goal.dueDate ? goal.dueDate : "No Due Date"}

@@ -27,7 +27,7 @@ export default function TodoForm({ onAddTodo }) {
       />
       <button
         type="submit"
-        className="btn btn-sm btn-neutral"
+        className="btn btn-sm bg-violet-600 hover:bg-violet-700 text-white rounded-xl"
       >
         Add
       </button>

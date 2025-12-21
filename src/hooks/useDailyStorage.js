@@ -1,71 +1,121 @@
 import { useEffect } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 
+const getToday = () => new Date().toISOString().slice(0, 10);
+const createDaily = (date = getToday) => ({
+  date,
+  todos: [],
+  log: "",
+  isDone: false,
+});
+
 export const useDailyStorage = () => {
-  const [daily, setDaily] = useLocalStorage("daily", {
-    date: "",
-    todos: [],
-    log: "",
+  const [data, setData] = useLocalStorage("daily", {
+    current: createDaily(),
+    history: {},
   });
 
-  const { todos, log } = daily;
+  const daily = data.current;
+  const todos = daily.todos;
+  const log = daily.log;
 
   useEffect(() => {
-    const today = new Date().toISOString().slice(0, 10);
-
+    const today = getToday();
     if (daily.date !== today) {
-      setDaily({
-        date: today,
-        todos: [],
-        log: "",
-      });
+      setData((prev) => ({
+        current: createDaily(today),
+        history: {
+          ...prev.history,
+          [daily.date]: { ...daily },
+        },
+      }));
     }
-  }, []);
+  }, [daily.date, setData]);
 
   const addTodo = (text) => {
-    setDaily((prev) => ({
+    setData((prev) => ({
       ...prev,
-      todos: [
-        ...prev.todos,
-        {
-          id: crypto.randomUUID(),
-          text,
-          completed: false,
-          createdAt: Date.now(),
-        },
-      ],
+      current: {
+        ...prev.current,
+        todos: [
+          ...prev.current.todos,
+          {
+            id: crypto.randomUUID(),
+            text,
+            completed: false,
+            createdAt: Date.now(),
+          },
+        ],
+      },
     }));
   };
 
   const toggleTodo = (id) => {
-    setDaily((prev) => ({
+    setData((prev) => ({
       ...prev,
-      todos: prev.todos.map((t) =>
-        t.id === id ? { ...t, completed: !t.completed } : t
-      ),
+      current: {
+        ...prev.current,
+        todos: prev.current.todos.map((t) =>
+          t.id === id ? { ...t, completed: !t.completed } : t
+        ),
+      },
     }));
   };
 
   const removeTodo = (id) => {
-    setDaily((prev) => ({
+    setData((prev) => ({
       ...prev,
-      todos: prev.todos.filter((t) => t.id !== id),
+      current: {
+        ...prev.current,
+        todos: prev.current.todos.filter((t) => t.id !== id),
+      },
     }));
   };
 
   const setLog = (text) => {
-    setDaily((prev) => ({ ...prev, log: text }));
+    setData((prev) => ({
+      ...prev,
+      current: { ...prev.current, log: text, isDone: text.trim().length > 0 },
+    }));
   };
 
-  useEffect(() => {
-    if (!Array.isArray(daily.todos) || typeof daily.log !== "string") {
-      setDaily({
-        ...daily,
-        todos: Array.isArray(daily.todos) ? daily.todos : [],
-        log: typeof daily.log === "string" ? daily.log : "",
-      });
+  const getLoggedDateObjects = () => {
+    const dates = [];
+
+    if (daily.isDone) {
+      dates.push(new Date(daily.date));
     }
-  }, [daily]);
+
+    for (const [date, entry] of Object.entries(data.history)) {
+      if (entry.isDone) {
+        dates.push(new Date(date));
+      }
+    }
+
+    return dates;
+  };
+
+  const calculateStreak = () => {
+    const today = getToday();
+    const history = data.history;
+
+    let count = 0;
+    let date = today;
+
+    while (true) {
+      const entry = date === daily.date ? daily : history[date];
+
+      if (!entry || !entry.log.trim()) break;
+
+      count++;
+
+      const d = new Date(date);
+      d.setDate(d.getDate() - 1);
+      date = d.toISOString().slice(0, 10);
+    }
+
+    return count;
+  };
 
   return {
     daily,
@@ -75,5 +125,8 @@ export const useDailyStorage = () => {
     toggleTodo,
     removeTodo,
     setLog,
+    loggedDates: getLoggedDateObjects(),
+    history: data.history,
+    streak: calculateStreak(),
   };
 };

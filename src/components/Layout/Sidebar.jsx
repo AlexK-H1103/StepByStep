@@ -11,7 +11,7 @@ export default function Sidebar({ onOpenTagManager, isOpen, closeSidebar }) {
     <>
       {/* PC Sidebar */}
       <aside
-        className={`${baseClasses} hidden md:flex fixed top-14 h-[calc(100vh-3.5rem)]`}
+        className={`${baseClasses} hidden lg:flex fixed top-14 h-[calc(100vh-3.5rem)]`}
       >
         <Nav />
       </aside>
@@ -19,7 +19,7 @@ export default function Sidebar({ onOpenTagManager, isOpen, closeSidebar }) {
       {/* Mobile Sidebar */}
       <aside
         className={`${baseClasses} fixed top-0 left-0 h-screen z-50 transform transition-transform duration-300
-        ${isOpen ? "translate-x-0" : "-translate-x-full"} md:hidden`}
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
       >
         <button
           className="px-3 py-2 mb-4 rounded-md bg-violet-600 text-white text-sm hover:bg-violet-700 transition"
@@ -34,7 +34,7 @@ export default function Sidebar({ onOpenTagManager, isOpen, closeSidebar }) {
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
           onClick={closeSidebar}
         />
       )}
@@ -45,8 +45,8 @@ export default function Sidebar({ onOpenTagManager, isOpen, closeSidebar }) {
     const navItems = [
       { name: "Home", path: "/" },
       { name: "Goals", path: "/goals" },
-      { name: "Tags", action: "openTags" },
       { name: "Calendar", path: "/calendar" },
+      { name: "Tags", action: "openTags" },
     ];
 
     return (

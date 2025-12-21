@@ -2,6 +2,7 @@ import Home from "./pages/Home";
 import Goals from "./pages/Goals";
 import GoalDetail from "./pages/GoalDetail";
 import GoalForm from "./pages/GoalForm";
+import Calendar from "./pages/Calendar";
 import Layout from "./components/Layout/Layout";
 import TagManagerModal from "./components/Tag/TagManagerModal";
 import { useState } from "react";
@@ -9,7 +10,6 @@ import { Routes, Route } from "react-router-dom";
 import { useGoals } from "./hooks/useGoals";
 import { useSteps } from "./hooks/useSteps";
 import { useTags } from "./hooks/useTags";
-import { useDate } from "./hooks/useDate";
 import { useDailyStorage } from "./hooks/useDailyStorage";
 
 export default function App() {
@@ -18,6 +18,7 @@ export default function App() {
     addGoal,
     updateGoal,
     removeGoal,
+    dueDates,
     progressMap,
     removeTagFromGoals,
   } = useGoals();
@@ -31,16 +32,17 @@ export default function App() {
     useTags(removeTagFromGoals);
 
   const {
-    formatDate,
-    parseDate,
-    getToday,
-    getTodayKey,
-    getDaysLeft,
-    getDeadlineColor,
-  } = useDate();
-
-  const { daily, todos, log, addTodo, toggleTodo, removeTodo, setLog } =
-    useDailyStorage();
+    daily,
+    todos,
+    log,
+    addTodo,
+    toggleTodo,
+    removeTodo,
+    setLog,
+    loggedDates,
+    history,
+    streak,
+  } = useDailyStorage();
 
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
 
@@ -51,16 +53,16 @@ export default function App() {
           path="/"
           element={
             <Home
-              goals={goals}
-              availableTags={availableTags}
-              progressMap={progressMap}
-              statusColor={getDeadlineColor}
+              dueDates={dueDates}
+              daily={daily}
               todos={todos}
               addTodo={addTodo}
               removeTodo={removeTodo}
               toggleTodo={toggleTodo}
               log={log}
               setLog={setLog}
+              loggedDates={loggedDates}
+              streak={streak}
             />
           }
         />
@@ -71,7 +73,6 @@ export default function App() {
               goals={goals}
               availableTags={availableTags}
               progressMap={progressMap}
-              statusColor={getDeadlineColor}
             />
           }
         />
@@ -89,7 +90,6 @@ export default function App() {
               addStep={addStep}
               toggleStep={toggleStep}
               removeStep={removeStep}
-              statusColor={getDeadlineColor}
             />
           }
         />
@@ -100,6 +100,22 @@ export default function App() {
               addGoal={addGoal}
               availableTags={availableTags}
               addTag={addTag}
+            />
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <Calendar
+              dueDates={dueDates}
+              daily={daily}
+              todos={todos}
+              addTodo={addTodo}
+              removeTodo={removeTodo}
+              toggleTodo={toggleTodo}
+              log={log}
+              setLog={setLog}
+              streak={streak}
             />
           }
         />
