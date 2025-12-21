@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocalStorage } from "./useLocalStorage";
+import { parseDate } from "../utils//dateUtils";
 import { generateId } from "../utils/generatedId";
 
 const getToday = () => new Date().toISOString().slice(0, 10);
@@ -84,12 +85,12 @@ export const useDailyStorage = () => {
     const dates = [];
 
     if (daily.isDone) {
-      dates.push(new Date(daily.date));
+      dates.push(parseDate(daily.date));
     }
 
     for (const [date, entry] of Object.entries(data.history)) {
       if (entry.isDone) {
-        dates.push(new Date(date));
+        dates.push(parseDate(date));
       }
     }
 
@@ -110,7 +111,7 @@ export const useDailyStorage = () => {
 
       count++;
 
-      const d = new Date(date);
+      const d = parseDate(date);
       d.setDate(d.getDate() - 1);
       date = d.toISOString().slice(0, 10);
     }
