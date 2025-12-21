@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { generateId } from "../utils/generatedId";
 
 export function useSteps(goals, updateGoal) {
   const findGoal = useCallback(
@@ -33,7 +34,7 @@ export function useSteps(goals, updateGoal) {
       const newSteps = [
         ...(goal.steps || []),
         {
-          id: crypto.randomUUID(),
+          id: generateId(),
           text: text.trim(),
           completed: false,
         },

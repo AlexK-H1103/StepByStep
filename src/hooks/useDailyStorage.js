@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocalStorage } from "./useLocalStorage";
+import { generateId } from "../utils/generatedId";
 
 const getToday = () => new Date().toISOString().slice(0, 10);
 const createDaily = (daily = {}) => ({
@@ -40,7 +41,7 @@ export const useDailyStorage = () => {
         todos: [
           ...prev.current.todos,
           {
-            id: crypto.randomUUID(),
+            id: generateId(),
             text,
             completed: false,
             createdAt: Date.now(),
