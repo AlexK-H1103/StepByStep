@@ -46,6 +46,17 @@ export default function App() {
 
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
 
+  if (typeof window !== "undefined") {
+    window.onerror = function (msg, src, line, col, err) {
+      document.body.innerHTML = `
+      <pre style="white-space:pre-wrap;color:red;padding:16px;">
+${msg}
+
+${err?.stack || ""}
+      </pre>
+    `;
+    };
+  }
   return (
     <Layout onOpenTagManager={() => setTagManagerOpen(true)}>
       <Routes>
