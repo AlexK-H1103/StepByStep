@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import ColorPalette, {
   getContrastTextColor,
 } from "../components/ui/ColorPalette";
+import { generateId } from "../utils/generatedId";
 
 export default function GoalForm({ addGoal, availableTags, addTag }) {
   const [goalText, setGoalText] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [steps, setSteps] = useState([{ id: crypto.randomUUID(), text: "" }]);
+  const [steps, setSteps] = useState([{ id: generateId(), text: "" }]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [newTagName, setNewTagName] = useState("");
   const [newTagColor, setNewTagColor] = useState("#EF4444");
@@ -21,7 +22,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
         s.id === id ? { ...s, text: value } : s
       );
       if (updated[updated.length - 1].text.trim() !== "") {
-        updated.push({ id: crypto.randomUUID(), text: "" });
+        updated.push({ id: generateId(), text: "" });
       }
       return updated;
     });
@@ -43,7 +44,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     const trimmedName = newTagName.trim();
     if (!trimmedName) return;
     const newTag = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       name: trimmedName,
       color: newTagColor,
     };
@@ -68,7 +69,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
       }));
 
     const newGoal = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       text: trimmedGoal,
       completed: false,
       steps: validSteps,
@@ -79,7 +80,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     addGoal(newGoal);
     setGoalText("");
     setDueDate("");
-    setSteps([{ id: crypto.randomUUID(), text: "" }]);
+    setSteps([{ id: generateId(), text: "" }]);
     setSelectedTags([]);
     navigate(`/goals/${newGoal.id}`);
   };

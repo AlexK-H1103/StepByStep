@@ -1,11 +1,12 @@
 import { useMemo, useEffect, useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
+import { generateId } from "../utils/generatedId";
 
 export const useGoals = () => {
   const [goals, setGoals] = useLocalStorage("goals", []);
 
   const createGoal = (goal) => ({
-    id: goal.id || crypto.randomUUID(),
+    id: goal.id || generateId(),
     text: goal.text || "",
     dueDate: goal.dueDate || null,
     completed: goal.completed || false,
