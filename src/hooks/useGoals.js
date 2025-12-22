@@ -1,23 +1,17 @@
-import { useMemo, useEffect, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import { parseDate } from "../utils/dateUtils";
 import { generateId } from "../utils/generatedId";
+import { sanitizeGoals } from "../utils/sanitizeData";
 
 export const useGoals = () => {
-  const [goals, setGoals] = useLocalStorage("goals", []);
+  const [goals, setGoals] = useLocalStorage("goals", [], sanitizeGoals);
 
-  const createGoal = (goal) => ({
-    id: goal.id || generateId(),
-    text: goal.text || "",
-    dueDate: goal.dueDate || null,
-    completed: goal.completed || false,
-    steps: Array.isArray(goal.steps) ? goal.steps : [],
-    tags: Array.isArray(goal.tags) ? goal.tags : [],
-    createdAt: goal.createdAt || Date.now(),
-  });
-
-  const addGoal = (goal) => {
-    setGoals((prev) => [...prev, createGoal(goal)]);
+  const addGoal = (goal = {}) => {
+    setGoals((prev) => [
+      ...prev,
+      { ...goal, id: generateId(), createdAt: Date.now() },
+    ]);
   };
 
   const removeGoal = (id) => {
@@ -58,17 +52,6 @@ export const useGoals = () => {
       }))
     );
   };
-
-  useEffect(() => {
-    let fixed = false;
-    const sanitized = goals.map((g) => {
-      const correct = createGoal(g);
-      if (JSON.stringify(g) !== JSON.stringify(correct)) fixed = true;
-      return correct;
-    });
-
-    if (fixed) setGoals(sanitized);
-  }, [goals, setGoals]);
 
   return {
     goals,

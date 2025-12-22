@@ -13,13 +13,16 @@ export function useSteps(goals, updateGoal) {
       if (!goal) return;
 
       const newStatus = !goal.completed;
-      const updated = {
+
+      const updatedSteps = goal.steps.map((s) =>
+        typeof s.id === "string" ? { ...s, completed: newStatus } : s
+      );
+
+      updateGoal({
         ...goal,
         completed: newStatus,
-        steps: goal.steps.map((s) => ({ ...s, completed: newStatus })),
-      };
-
-      updateGoal(updated);
+        steps: updatedSteps,
+      });
     },
     [findGoal, updateGoal]
   );
@@ -31,19 +34,17 @@ export function useSteps(goals, updateGoal) {
       const goal = findGoal(goalId);
       if (!goal) return;
 
-      const newSteps = [
-        ...(goal.steps || []),
-        {
-          id: generateId(),
-          text: text.trim(),
-          completed: false,
-        },
-      ];
-
       updateGoal({
         ...goal,
-        steps: newSteps,
         completed: false,
+        steps: [
+          ...goal.steps,
+          {
+            id: generateId(),
+            text: text.trim(),
+            completed: false,
+          },
+        ],
       });
     },
     [findGoal, updateGoal]
@@ -58,8 +59,10 @@ export function useSteps(goals, updateGoal) {
         s.id === stepId ? { ...s, completed: !s.completed } : s
       );
 
+      const validSteps = updatedSteps.filter((s) => typeof s.id === "string");
+
       const allCompleted =
-        updatedSteps.length > 0 && updatedSteps.every((s) => s.completed);
+        validSteps.length > 0 && validSteps.every((s) => s.completed);
 
       updateGoal({
         ...goal,
@@ -77,8 +80,10 @@ export function useSteps(goals, updateGoal) {
 
       const updatedSteps = goal.steps.filter((s) => s.id !== stepId);
 
+      const validSteps = updatedSteps.filter((s) => typeof s.id === "string");
+
       const allCompleted =
-        updatedSteps.length > 0 && updatedSteps.every((s) => s.completed);
+        validSteps.length > 0 && validSteps.every((s) => s.completed);
 
       updateGoal({
         ...goal,

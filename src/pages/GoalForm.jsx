@@ -82,7 +82,7 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
     setDueDate("");
     setSteps([{ id: generateId(), text: "" }]);
     setSelectedTags([]);
-    navigate(`/goals/${newGoal.id}`);
+    navigate("/goals");
   };
 
   return (
