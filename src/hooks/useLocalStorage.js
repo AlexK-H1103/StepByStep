@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 
-export function useLocalStorage(key, initialValue) {
+export function useLocalStorage(key, initialValue, sanitize = (v) => v) {
   const [state, setState] = useState(() => {
     try {
       const raw = localStorage.getItem(key);
-      return raw ? JSON.parse(raw) : initialValue;
-    } catch {
-      return initialValue;
+      const parsed = raw ? JSON.parse(raw) : initialValue;
+      return sanitize(parsed);
+    } catch (e) {
+      console.error("Failed to read from localStorage", e);
+      return sanitize(initialValue);
     }
   });
 
