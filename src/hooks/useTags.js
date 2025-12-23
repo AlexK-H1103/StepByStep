@@ -1,5 +1,4 @@
 import { useLocalStorage } from "./useLocalStorage";
-import { generateId } from "../utils/generatedId";
 import { sanitizeTags } from "../utils/sanitizeData";
 
 export const useTags = (removeTagFromGoals) => {
@@ -13,7 +12,7 @@ export const useTags = (removeTagFromGoals) => {
     setAvailableTags((prev) => [
       ...prev,
       {
-        id: tag.id ?? generateId(),
+        id: tag.id ?? crypto.randomUUID(),
         name: tag.name ?? "",
         color: tag.color ?? "gray",
       },

@@ -33,8 +33,6 @@ export default function App() {
 
   const {
     daily,
-    todos,
-    log,
     addTodo,
     toggleTodo,
     removeTodo,
@@ -43,6 +41,7 @@ export default function App() {
     history,
     streak,
   } = useDailyStorage();
+  const { todos, log } = daily;
 
   const [tagManagerOpen, setTagManagerOpen] = useState(false);
 
@@ -54,7 +53,6 @@ export default function App() {
           element={
             <Home
               dueDates={dueDates}
-              daily={daily}
               todos={todos}
               addTodo={addTodo}
               removeTodo={removeTodo}
@@ -108,7 +106,6 @@ export default function App() {
           element={
             <Calendar
               dueDates={dueDates}
-              daily={daily}
               todos={todos}
               addTodo={addTodo}
               removeTodo={removeTodo}
