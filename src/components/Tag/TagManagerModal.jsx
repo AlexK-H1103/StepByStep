@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import ColorPalette, { getContrastTextColor } from "../ui/ColorPalette";
 import TagEditorPanel from "./TagEditorPanel";
-import { generateId } from "../../utils/generatedId";
 
 export default function TagManagerModal({
   isOpen,
@@ -31,7 +30,7 @@ export default function TagManagerModal({
     const name = input.trim();
     if (!name) return;
     const newTag = {
-      id: generateId(),
+      id: crypto.randomUUID(),
       name,
       color: newColor,
     };

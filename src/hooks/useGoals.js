@@ -1,7 +1,6 @@
 import { useMemo, useCallback } from "react";
 import { useLocalStorage } from "./useLocalStorage";
-import { parseDate } from "../utils/dateUtils";
-import { generateId } from "../utils/generatedId";
+import { dateKeyToDate } from "../utils/dateUtils";
 import { sanitizeGoals } from "../utils/sanitizeData";
 
 export const useGoals = () => {
@@ -10,7 +9,7 @@ export const useGoals = () => {
   const addGoal = (goal = {}) => {
     setGoals((prev) => [
       ...prev,
-      { ...goal, id: generateId(), createdAt: Date.now() },
+      { ...goal, id: crypto.randomUUID(), createdAt: Date.now() },
     ]);
   };
 
@@ -26,7 +25,7 @@ export const useGoals = () => {
 
   const dueDates = goals
     .filter((g) => g.dueDate)
-    .map((g) => parseDate(g.dueDate));
+    .map((g) => dateKeyToDate(g.dueDate));
 
   const calculateProgress = useCallback((goal) => {
     if (!goal?.steps?.length) {

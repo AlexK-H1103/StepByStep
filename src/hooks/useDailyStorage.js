@@ -1,19 +1,15 @@
 import { useEffect, useMemo } from "react";
 import { useLocalStorage } from "./useLocalStorage";
-import { parseDate } from "../utils/dateUtils";
-import { generateId } from "../utils/generatedId";
+import {
+  getLocalDateKey,
+  getPrevDateKey,
+  dateKeyToDate,
+} from "../utils/dateUtils";
 import { sanitizeDailyStorage } from "../utils/sanitizeData";
-
-const formatDate = (d) =>
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
-    d.getDate()
-  ).padStart(2, "0")}`;
-
-const getToday = () => formatDate(new Date());
 
 const initialValue = {
   current: {
-    date: getToday(),
+    date: getLocalDateKey(),
     todos: [],
     log: "",
     isDone: false,
@@ -29,10 +25,9 @@ export const useDailyStorage = () => {
   );
 
   const { current: daily, history } = data;
-  const { todos, log } = daily;
 
   useEffect(() => {
-    const today = getToday();
+    const today = getLocalDateKey();
 
     if (daily.date !== today) {
       setData((prev) => ({
@@ -44,7 +39,7 @@ export const useDailyStorage = () => {
         },
         history: {
           ...prev.history,
-          [daily.date]: prev.current,
+          [prev.current.date]: prev.current,
         },
       }));
     }
@@ -60,7 +55,7 @@ export const useDailyStorage = () => {
         todos: [
           ...prev.current.todos,
           {
-            id: generateId(),
+            id: crypto.randomUUID(),
             text: text.trim(),
             completed: false,
             createdAt: Date.now(),
@@ -107,37 +102,29 @@ export const useDailyStorage = () => {
     const dates = [];
 
     if (daily.isDone) {
-      dates.push(parseDate(daily.date));
+      dates.push(dateKeyToDate(daily.date));
     }
 
     Object.entries(history).forEach(([date, entry]) => {
       if (entry.isDone) {
-        dates.push(parseDate(date));
+        dates.push(dateKeyToDate(date));
       }
     });
 
     return dates;
-  }, [daily, history]);
+  }, [daily.isDone, daily.date, history]);
 
   const streak = useMemo(() => {
     let count = 0;
-    let date = daily.log.trim()
-      ? daily.date
-      : (() => {
-          const d = parseDate(daily.date);
-          d.setDate(d.getDate() - 1);
-          return formatDate(d);
-        })();
+    let dateKey = daily.isDone ? daily.date : getPrevDateKey(daily.date);
 
-    while (true) {
-      const entry = date === daily.date ? daily : history[date];
-      if (!entry || !entry.log?.trim()) break;
+    while (dateKey) {
+      const entry = dateKey === daily.date ? daily : history[dateKey];
+
+      if (!entry?.isDone) break;
 
       count++;
-
-      const d = parseDate(date);
-      d.setDate(d.getDate() - 1);
-      date = formatDate(d);
+      dateKey = getPrevDateKey(dateKey);
     }
 
     return count;
@@ -145,8 +132,6 @@ export const useDailyStorage = () => {
 
   return {
     daily,
-    todos,
-    log,
     history,
     addTodo,
     toggleTodo,

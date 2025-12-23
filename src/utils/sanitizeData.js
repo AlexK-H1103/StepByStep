@@ -1,11 +1,13 @@
+import { getLocalDateKey } from "./dateUtils";
+
 const sanitizeStep = (step = {}) => ({
-  id: typeof step.id === "string" ? step.id : null,
+  id: typeof step.id === "string" ? step.id : crypto.randomUUID(),
   text: typeof step.text === "string" ? step.text : "",
   completed: !!step.completed,
 });
 
 export const sanitizeGoal = (goal = {}) => ({
-  id: typeof goal.id === "string" ? goal.id : null,
+  id: typeof goal.id === "string" ? goal.id : crypto.randomUUID(),
   text: typeof goal.text === "string" ? goal.text : "",
   dueDate: typeof goal.dueDate === "string" ? goal.dueDate : null,
   completed: !!goal.completed,
@@ -13,7 +15,7 @@ export const sanitizeGoal = (goal = {}) => ({
   tags: Array.isArray(goal.tags)
     ? goal.tags.filter((id) => typeof id === "string")
     : [],
-  createdAt: typeof goal.createdAt === "number" ? goal.createdAt : null,
+  createdAt: typeof goal.createdAt === "number" ? goal.createdAt : Date.now(),
 });
 
 export const sanitizeGoals = (goals) =>
@@ -23,23 +25,23 @@ export const sanitizeTags = (tags = []) => {
   if (!Array.isArray(tags)) return [];
 
   return tags
-    .filter((t) => t && typeof t === "object" && typeof t.id === "string")
+    .filter((t) => t && typeof t === "object")
     .map((t) => ({
-      id: t.id,
+      id: typeof t.id === "string" ? t.id : crypto.randomUUID(),
       name: typeof t.name === "string" ? t.name : "",
       color: typeof t.color === "string" ? t.color : "gray",
     }));
 };
 
 const sanitizeTodo = (todo = {}) => ({
-  id: typeof todo.id === "string" ? todo.id : null,
+  id: typeof todo.id === "string" ? todo.id : crypto.randomUUID(),
   text: typeof todo.text === "string" ? todo.text : "",
   completed: !!todo.completed,
-  createdAt: typeof todo.createdAt === "number" ? todo.createdAt : null,
+  createdAt: typeof todo.createdAt === "number" ? todo.createdAt : Date.now(),
 });
 
 export const sanitizeDaily = (daily = {}) => ({
-  date: typeof daily.date === "string" ? daily.date : null,
+  date: typeof daily.date === "string" ? daily.date : getLocalDateKey(),
   todos: Array.isArray(daily.todos) ? daily.todos.map(sanitizeTodo) : [],
   log: typeof daily.log === "string" ? daily.log : "",
   isDone: !!daily.isDone,
@@ -51,7 +53,7 @@ export const sanitizeDailyStorage = (data = {}) => ({
     typeof data.history === "object" && data.history !== null
       ? Object.fromEntries(
           Object.entries(data.history).map(([date, entry]) => [
-            date,
+            typeof date === "string" ? date : getLocalDateKey(),
             sanitizeDaily(entry),
           ])
         )

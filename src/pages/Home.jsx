@@ -5,7 +5,6 @@ import MiniCalendar from "../components/Calendar/MiniCalendar";
 
 export default function Home({
   dueDates,
-  daily,
   todos,
   addTodo,
   removeTodo,
