@@ -56,19 +56,19 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const trimmedGoal = goalText.trim();
     if (!trimmedGoal) return;
 
     const validSteps = steps
       .filter((s) => s.text.trim() !== "")
       .map((s) => ({
-        id: s.id,
+        id: crypto.randomUUID(),
         text: s.text.trim(),
         completed: false,
       }));
 
     const newGoal = {
-      id: crypto.randomUUID(),
       text: trimmedGoal,
       completed: false,
       steps: validSteps,
@@ -76,12 +76,14 @@ export default function GoalForm({ addGoal, availableTags, addTag }) {
       dueDate: dueDate || null,
     };
 
-    addGoal(newGoal);
+    const newId = addGoal(newGoal);
+
+    navigate(`/goals/${newId}`);
+
     setGoalText("");
     setDueDate("");
     setSteps([{ id: crypto.randomUUID(), text: "" }]);
     setSelectedTags([]);
-    navigate("/goals");
   };
 
   return (

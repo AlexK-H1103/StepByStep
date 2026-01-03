@@ -23,7 +23,7 @@ export default function TodoForm({ onAddTodo }) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Add todo"
-        className="input input-bordered text-gray-400 bg-violet-100 input-sm flex-grow"
+        className="input input-bordered text-gray-500 bg-violet-100 input-sm flex-grow"
       />
       <button
         type="submit"

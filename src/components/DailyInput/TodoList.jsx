@@ -10,7 +10,7 @@ export default function TodoList({ todos, onToggleTodo, onRemoveTodo }) {
   return (
     <div className="space-y-6">
       <section>
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">Incomplete</h3>
+        <h3 className="text-sm font-semibold text-gray-300 mb-2">Incomplete</h3>
         {incomplete.length ? (
           <div className="space-y-2">
             {incomplete.map((t) => (
@@ -28,7 +28,7 @@ export default function TodoList({ todos, onToggleTodo, onRemoveTodo }) {
       </section>
 
       <section>
-        <h3 className="text-sm font-semibold text-gray-700 mb-2">Completed</h3>
+        <h3 className="text-sm font-semibold text-gray-300 mb-2">Complete</h3>
         {complete.length ? (
           <div className="space-y-2">
             {complete.map((t) => (

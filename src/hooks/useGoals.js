@@ -7,10 +7,11 @@ export const useGoals = () => {
   const [goals, setGoals] = useLocalStorage("goals", [], sanitizeGoals);
 
   const addGoal = (goal = {}) => {
-    setGoals((prev) => [
-      ...prev,
-      { ...goal, id: crypto.randomUUID(), createdAt: Date.now() },
-    ]);
+    const id = crypto.randomUUID();
+
+    setGoals((prev) => [...prev, { ...goal, id, createdAt: Date.now() }]);
+
+    return id;
   };
 
   const removeGoal = (id) => {
