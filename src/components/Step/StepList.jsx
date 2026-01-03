@@ -11,9 +11,7 @@ export default function StepList({ goal, onToggleStep, onRemoveStep }) {
   return (
     <div className="space-y-6">
       <section>
-        <h3 className="text-sm font-semibold text-gray-300 mb-2">
-          In Progress
-        </h3>
+        <h3 className="text-sm font-semibold text-gray-300 mb-2">Incomplete</h3>
         {incomplete.length ? (
           <div className="space-y-2">
             {incomplete.map((s) => (
@@ -31,7 +29,7 @@ export default function StepList({ goal, onToggleStep, onRemoveStep }) {
       </section>
 
       <section>
-        <h3 className="text-sm font-semibold text-gray-300 mb-2">Completed</h3>
+        <h3 className="text-sm font-semibold text-gray-300 mb-2">Complete</h3>
         {complete.length ? (
           <div className="space-y-2">
             {complete.map((s) => (

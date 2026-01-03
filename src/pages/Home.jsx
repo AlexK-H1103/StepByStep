@@ -36,7 +36,7 @@ export default function Home({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-6">
           <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6 shadow-lg">
             <div className="flex border-b border-gray-700 mb-4">
@@ -51,7 +51,7 @@ export default function Home({
                 onToggleTodo={toggleTodo}
                 onRemoveTodo={removeTodo}
               />
-              <div className="divider text-violet-300 my-3">Daily Input</div>
+              <div className="text-violet-300 my-3">Daily Input</div>
               <LogInput
                 value={log}
                 onChange={setLog}

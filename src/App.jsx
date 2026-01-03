@@ -106,13 +106,13 @@ export default function App() {
           element={
             <Calendar
               dueDates={dueDates}
-              todos={todos}
+              daily={daily}
+              history={history}
               addTodo={addTodo}
               removeTodo={removeTodo}
               toggleTodo={toggleTodo}
-              log={log}
               setLog={setLog}
-              streak={streak}
+              loggedDates={loggedDates}
             />
           }
         />

@@ -6,17 +6,21 @@ const sanitizeStep = (step = {}) => ({
   completed: !!step.completed,
 });
 
-export const sanitizeGoal = (goal = {}) => ({
-  id: typeof goal.id === "string" ? goal.id : crypto.randomUUID(),
-  text: typeof goal.text === "string" ? goal.text : "",
-  dueDate: typeof goal.dueDate === "string" ? goal.dueDate : null,
-  completed: !!goal.completed,
-  steps: Array.isArray(goal.steps) ? goal.steps.map(sanitizeStep) : [],
-  tags: Array.isArray(goal.tags)
-    ? goal.tags.filter((id) => typeof id === "string")
-    : [],
-  createdAt: typeof goal.createdAt === "number" ? goal.createdAt : Date.now(),
-});
+export const sanitizeGoal = (goal = {}) => {
+  if (typeof goal.id !== "string") return null;
+
+  return {
+    id: goal.id,
+    text: typeof goal.text === "string" ? goal.text : "",
+    dueDate: typeof goal.dueDate === "string" ? goal.dueDate : null,
+    completed: !!goal.completed,
+    steps: Array.isArray(goal.steps) ? goal.steps.map(sanitizeStep) : [],
+    tags: Array.isArray(goal.tags)
+      ? goal.tags.filter((id) => typeof id === "string")
+      : [],
+    createdAt: typeof goal.createdAt === "number" ? goal.createdAt : Date.now(),
+  };
+};
 
 export const sanitizeGoals = (goals) =>
   Array.isArray(goals) ? goals.map(sanitizeGoal) : [];

@@ -45,57 +45,124 @@ export const useDailyStorage = () => {
     }
   }, [daily.date, setData]);
 
-  const addTodo = (text) => {
+  const addTodo = (text, dateKey = daily.date) => {
     if (!text.trim()) return;
 
-    setData((prev) => ({
-      ...prev,
-      current: {
-        ...prev.current,
-        todos: [
-          ...prev.current.todos,
-          {
-            id: crypto.randomUUID(),
-            text: text.trim(),
-            completed: false,
-            createdAt: Date.now(),
+    setData((prev) => {
+      if (dateKey === prev.current.date) {
+        return {
+          ...prev,
+          current: {
+            ...prev.current,
+            todos: [
+              ...prev.current.todos,
+              {
+                id: crypto.randomUUID(),
+                text: text.trim(),
+                completed: false,
+                createdAt: Date.now(),
+              },
+            ],
           },
-        ],
-      },
-    }));
+        };
+      }
+      const target = prev.history[dateKey] ?? {
+        date: dateKey,
+        todos: [],
+        log: "",
+        isDone: false,
+      };
+
+      return {
+        ...prev,
+        history: {
+          ...prev.history,
+          [dateKey]: {
+            ...target,
+            todos: [
+              ...target.todos,
+              {
+                id: crypto.randomUUID(),
+                text: text.trim(),
+                completed: false,
+                createdAt: Date.now(),
+              },
+            ],
+          },
+        },
+      };
+    });
   };
 
-  const toggleTodo = (id) => {
-    setData((prev) => ({
-      ...prev,
-      current: {
-        ...prev.current,
-        todos: prev.current.todos.map((t) =>
+  const toggleTodo = (id, dateKey = daily.date) => {
+    setData((prev) => {
+      const target =
+        dateKey === prev.current.date ? prev.current : prev.history[dateKey];
+
+      if (!target) return prev;
+
+      const updated = {
+        ...target,
+        todos: target.todos.map((t) =>
           t.id === id ? { ...t, completed: !t.completed } : t
         ),
-      },
-    }));
+      };
+
+      return dateKey === prev.current.date
+        ? { ...prev, current: updated }
+        : {
+            ...prev,
+            history: { ...prev.history, [dateKey]: updated },
+          };
+    });
   };
 
-  const removeTodo = (id) => {
-    setData((prev) => ({
-      ...prev,
-      current: {
-        ...prev.current,
-        todos: prev.current.todos.filter((t) => t.id !== id),
-      },
-    }));
+  const removeTodo = (id, dateKey = daily.date) => {
+    setData((prev) => {
+      const target =
+        dateKey === prev.current.date ? prev.current : prev.history[dateKey];
+
+      if (!target) return prev;
+
+      const updated = {
+        ...target,
+        todos: target.todos.filter((t) => t.id !== id),
+      };
+
+      return dateKey === prev.current.date
+        ? { ...prev, current: updated }
+        : {
+            ...prev,
+            history: { ...prev.history, [dateKey]: updated },
+          };
+    });
   };
 
-  const setLog = (text) => {
-    setData((prev) => ({
-      ...prev,
-      current: {
-        ...prev.current,
+  const setLog = (text, dateKey = daily.date) => {
+    setData((prev) => {
+      const target =
+        dateKey === prev.current.date
+          ? prev.current
+          : prev.history[dateKey] ?? {
+              date: dateKey,
+              todos: [],
+              log: "",
+              isDone: false,
+            };
+
+      const updated = {
+        ...target,
         log: text,
         isDone: text.trim().length > 0,
-      },
-    }));
+      };
+
+      return dateKey === prev.current.date
+        ? { ...prev, current: updated }
+        : {
+            ...prev,
+            history: { ...prev.history, [dateKey]: updated },
+          };
+    });
   };
 
   const loggedDates = useMemo(() => {

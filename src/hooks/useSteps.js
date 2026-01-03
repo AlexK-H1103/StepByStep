@@ -1,97 +1,74 @@
-import { useCallback } from "react";
-
 export function useSteps(goals, updateGoal) {
-  const findGoal = useCallback(
-    (goalId) => goals.find((g) => g.id === goalId),
-    [goals]
-  );
+  const findGoal = (goalId) => goals.find((g) => g.id === goalId);
 
-  const toggleGoalAndSteps = useCallback(
-    (goalId) => {
-      const goal = findGoal(goalId);
-      if (!goal) return;
+  const toggleGoalAndSteps = (goalId) => {
+    const goal = findGoal(goalId);
+    if (!goal) return;
 
-      const newStatus = !goal.completed;
+    const newStatus = !goal.completed;
 
-      const updatedSteps = goal.steps.map((s) =>
-        typeof s.id === "string" ? { ...s, completed: newStatus } : s
-      );
-
-      updateGoal({
-        ...goal,
+    updateGoal({
+      ...goal,
+      completed: newStatus,
+      steps: goal.steps.map((s) => ({
+        ...s,
         completed: newStatus,
-        steps: updatedSteps,
-      });
-    },
-    [findGoal, updateGoal]
-  );
+      })),
+    });
+  };
 
-  const addStep = useCallback(
-    (goalId, text) => {
-      if (!text.trim()) return;
+  const addStep = (goalId, text) => {
+    if (!text.trim()) return;
 
-      const goal = findGoal(goalId);
-      if (!goal) return;
+    const goal = findGoal(goalId);
+    if (!goal) return;
 
-      updateGoal({
-        ...goal,
-        completed: false,
-        steps: [
-          ...goal.steps,
-          {
-            id: crypto.randomUUID(),
-            text: text.trim(),
-            completed: false,
-          },
-        ],
-      });
-    },
-    [findGoal, updateGoal]
-  );
+    updateGoal({
+      ...goal,
+      completed: false,
+      steps: [
+        ...goal.steps,
+        {
+          id: crypto.randomUUID(),
+          text: text.trim(),
+          completed: false,
+        },
+      ],
+    });
+  };
 
-  const toggleStep = useCallback(
-    (goalId, stepId) => {
-      const goal = findGoal(goalId);
-      if (!goal) return;
+  const toggleStep = (goalId, stepId) => {
+    const goal = findGoal(goalId);
+    if (!goal) return;
 
-      const updatedSteps = goal.steps.map((s) =>
-        s.id === stepId ? { ...s, completed: !s.completed } : s
-      );
+    const updatedSteps = goal.steps.map((s) =>
+      s.id === stepId ? { ...s, completed: !s.completed } : s
+    );
 
-      const validSteps = updatedSteps.filter((s) => typeof s.id === "string");
+    const allCompleted =
+      updatedSteps.length > 0 && updatedSteps.every((s) => s.completed);
 
-      const allCompleted =
-        validSteps.length > 0 && validSteps.every((s) => s.completed);
+    updateGoal({
+      ...goal,
+      steps: updatedSteps,
+      completed: allCompleted,
+    });
+  };
 
-      updateGoal({
-        ...goal,
-        steps: updatedSteps,
-        completed: allCompleted,
-      });
-    },
-    [findGoal, updateGoal]
-  );
+  const removeStep = (goalId, stepId) => {
+    const goal = findGoal(goalId);
+    if (!goal) return;
 
-  const removeStep = useCallback(
-    (goalId, stepId) => {
-      const goal = findGoal(goalId);
-      if (!goal) return;
+    const updatedSteps = goal.steps.filter((s) => s.id !== stepId);
+    const allCompleted =
+      updatedSteps.length > 0 && updatedSteps.every((s) => s.completed);
 
-      const updatedSteps = goal.steps.filter((s) => s.id !== stepId);
-
-      const validSteps = updatedSteps.filter((s) => typeof s.id === "string");
-
-      const allCompleted =
-        validSteps.length > 0 && validSteps.every((s) => s.completed);
-
-      updateGoal({
-        ...goal,
-        steps: updatedSteps,
-        completed: allCompleted,
-      });
-    },
-    [findGoal, updateGoal]
-  );
+    updateGoal({
+      ...goal,
+      steps: updatedSteps,
+      completed: allCompleted,
+    });
+  };
 
   return {
     toggleGoalAndSteps,
